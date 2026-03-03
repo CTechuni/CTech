@@ -1,5 +1,5 @@
 // Utilidades para manejo de autenticación
-// TODO: Integrar con tu backend cuando esté listo
+import { API_CONFIG, buildApiUrl } from '../config/api.js';
 
 export class AuthManager {
     constructor() {
@@ -36,142 +36,74 @@ export class AuthManager {
         localStorage.removeItem(this.userKey);
     }
 
-    // Verificar si el token ha expirado (básico)
+    // Verificar si el token ha expirado
     isTokenExpired(token) {
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             const currentTime = Date.now() / 1000;
             return payload.exp < currentTime;
         } catch (error) {
-            return true; // Si no se puede decodificar, considerarlo expirado
+            return true;
         }
     }
 
-    // Login (simulado por ahora)
-    async login(email, password, remember = false) {
-        // TODO: Reemplazar con llamada real al backend
-        // const response = await fetch('/api/auth/login', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ email, password, remember })
-        // });
-        
-        // if (!response.ok) {
-        //     throw new Error('Credenciales inválidas');
-        // }
-        
-        // const data = await response.json();
-        // this.setAuthData(data.token, data.user);
-        // return data;
+    // Login real al backend
+    async login(email, password) {
+        const url = buildApiUrl(API_CONFIG.AUTH.LOGIN);
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
 
-        // SIMULACIÓN TEMPORAL
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        if (email === 'test@example.com' && password === 'password') {
-            const mockUser = {
-                id: 1,
-                email: email,
-                name: 'Usuario de Prueba',
-                role: 'user'
-            };
-            
-            const mockToken = 'mock-jwt-token-' + Date.now();
-            this.setAuthData(mockToken, mockUser);
-            
-            return { token: mockToken, user: mockUser };
-        } else {
-            throw new Error('Credenciales inválidas');
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.detail || 'Credenciales inválidas');
         }
+
+        const data = await response.json();
+        this.setAuthData(data.access_token, data.user);
+        return data;
     }
 
     // Logout
-    async logout() {
-        // TODO: Llamar al endpoint de logout del backend
-        // await fetch('/api/auth/logout', {
-        //     method: 'POST',
-        //     headers: { 'Authorization': `Bearer ${this.getToken()}` }
-        // });
-        
+    logout() {
         this.clearAuthData();
     }
 
-    // Registro (simulado por ahora)
-    async register(userData) {
-        // TODO: Reemplazar con llamada real al backend
-        // const response = await fetch('/api/auth/register', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(userData)
-        // });
+    // Helper para realizar peticiones autenticadas
+    static async fetch(endpoint, options = {}) {
+        const token = localStorage.getItem('authToken');
+        const url = buildApiUrl(endpoint);
         
-        // if (!response.ok) {
-        //     const error = await response.json();
-        //     throw new Error(error.message);
-        // }
-        
-        // return response.json();
-
-        // SIMULACIÓN TEMPORAL
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Validaciones simuladas
-        if (!userData.community) {
-            throw new Error('Debes seleccionar una comunidad');
-        }
-        
-        if (!userData.inviteCode) {
-            throw new Error('El código de invitación es requerido');
-        }
-        
-        if (userData.inviteCode.length < 6) {
-            throw new Error('El código de invitación debe tener al menos 6 caracteres');
-        }
-        
-        console.log('Datos de registro:', userData);
-        return { 
-            message: 'Usuario registrado exitosamente',
-            user: {
-                id: Date.now(),
-                email: userData.email,
-                fullName: userData.fullName,
-                community: userData.community
-            }
+        const headers = {
+            ...options.headers,
+            'Authorization': token ? `Bearer ${token}` : '',
+            'Content-Type': 'application/json'
         };
-    }
-    
-    // Verificar código de invitación (simulado por ahora)
-    async verifyInviteCode(code, community) {
-        // TODO: Implementar verificación real con backend
-        // const response = await fetch('/api/auth/verify-invite-code', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ code, community })
-        // });
-        
-        // return response.json();
 
-        // SIMULACIÓN TEMPORAL
-        await new Promise(resolve => setTimeout(resolve, 500));
+        const response = await fetch(url, { ...options, headers });
         
-        // Códigos de prueba
-        const validCodes = ['CTECH2024', 'WELCOME', 'COMMUNITY', 'DEVELOPER'];
-        
-        if (validCodes.includes(code.toUpperCase())) {
-            return { valid: true, message: 'Código válido' };
-        } else {
-            throw new Error('Código de invitación inválido');
+        if (response.status === 401) {
+            localStorage.removeItem('authToken');
+            window.location.href = '/login';
+            return;
         }
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({}));
+            throw new Error(error.detail || 'Error en la petición');
+        }
+
+        return response.json();
     }
 }
 
-// Instancia global del AuthManager
 export const authManager = new AuthManager();
 
-// Función helper para verificar autenticación en componentes
 export function requireAuth() {
     if (!authManager.isAuthenticated()) {
-        // Redirigir al login o mostrar modal
-        window.openModal('loginModal');
+        window.location.href = '/login';
         return false;
     }
     return true;

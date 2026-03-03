@@ -1,0 +1,77 @@
+---
+// AdminCommunitySection.astro
+// Gestión de comunidades/organizaciones
+---
+
+<div class="admin-section communities-section">
+    <div class="section-header">
+        <div class="header-left">
+            <h2>Comunidades</h2>
+            <p>Control total sobre los espacios de aprendizaje de CTech</p>
+        </div>
+        <div class="header-right">
+            <button class="btn-primary" id="addCommunityBtn">
+                <i class="fas fa-plus"></i> Nueva Comunidad
+            </button>
+        </div>
+    </div>
+
+    <div class="communities-grid" id="communitiesGrid">
+        <!-- Data loaded via script -->
+        <div class="loading">Cargando comunidades...</div>
+    </div>
+</div>
+
+<style>
+    .admin-section { padding: 2rem; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .communities-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+</style>
+
+<script>
+    import { AuthManager } from '../../utils/auth';
+
+    async function loadCommunities() {
+        try {
+            const communities = await AuthManager.fetch('/communities/');
+            const grid = document.getElementById('communitiesGrid');
+            if (!grid) return;
+
+            if (communities.length === 0) {
+                grid.innerHTML = '<p>No hay comunidades creadas.</p>';
+                return;
+            }
+
+            grid.innerHTML = communities.map(c => `
+                <div class="community-card glass">
+                    <h3>${c.name_community}</h3>
+                    <p>${c.description_community || 'Sin descripción'}</p>
+                    <div class="card-footer">
+                        <span>Código: <code>${c.code}</code></span>
+                        <span class="status ${c.status_community}">${c.status_community}</span>
+                    </div>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadCommunities);
+</script>

@@ -1,0 +1,68 @@
+---
+// AdminLayout.astro
+import AdminSidebar from '../../components/admin/AdminSidebar.astro';
+import AdminHeader from '../../components/admin/AdminHeader.astro';
+
+interface Props {
+    title: string;
+    subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | CTech Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body class="admin-body">
+    <div class="admin-container">
+        <AdminSidebar />
+        <main class="admin-main">
+            <AdminHeader title={title} subtitle={subtitle} />
+            <div class="admin-content">
+                <slot />
+            </div>
+        </main>
+    </div>
+
+    <style is:global>
+        :root {
+            --primary: #4facfe;
+            --secondary: #00f2fe;
+            --bg-dark: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body.admin-body {
+            background-color: var(--bg-dark);
+            margin: 0;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .admin-main {
+            flex: 1;
+            margin-left: 280px; /* Sidebar width */
+            padding: 2rem;
+            background: radial-gradient(circle at 50% 0%, rgba(79, 172, 254, 0.05) 0%, transparent 50%);
+        }
+
+        .admin-content {
+            margin-top: 1rem;
+        }
+    </style>
+</body>
+</html>

@@ -277,8 +277,12 @@
                     throw new Error('El gestor de autenticación no está disponible.');
                 }
 
-                const result = await authManager.login(email, password, remember);
+                // Antes de invocar al gestor, asegurarse que los campos no estén vacíos
+                if (!email || !password) {
+                    throw new Error('Debe ingresar email y contraseña');
+                }
 
+                const result = await authManager.login(email, password, remember);
                 console.log('Login exitoso:', result);
 
                 if (result?.user?.name) {
@@ -290,6 +294,11 @@
                 // Cerrar modal y actualizar UI
                 closeModal('loginModal');
                 updateAuthUI(result.user);
+
+                // Redirigir a panel admin si el usuario tiene ese rol
+                if (result.user && result.user.role === 'admin') {
+                    window.location.href = '/admin';
+                }
             } catch (error) {
                 console.error('Error de login:', error);
                 alert('Error: ' + (error?.message || error));
@@ -304,13 +313,8 @@
 
     // Función para actualizar la UI después del login
     function updateAuthUI(user) {
-        // Implementar según la UI de la app.
-        // Ejemplo mínimo:
+        // En el estado original sólo mostraba un log o ajustaba botones.
         console.log('Actualizando UI para usuario:', user);
-        // const authButtons = document.querySelector('.auth-buttons');
-        // if (authButtons && user) {
-        //     authButtons.innerHTML = `<div class="user-menu"><span>Hola, ${user.name}</span><button onclick="logout()">Cerrar Sesión</button></div>`;
-        // }
     }
 
     // Función para logout

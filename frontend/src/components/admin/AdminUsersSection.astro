@@ -1,0 +1,174 @@
+---
+// AdminUsersSection.astro
+// Componente premium para la gestión de usuarios
+---
+
+<div class="admin-section users-section">
+    <div class="section-header">
+        <div class="header-left">
+            <h2>Gestión de Usuarios</h2>
+            <p>Directorio global de miembros de la plataforma CTech</p>
+        </div>
+        <div class="header-right">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="userSearch" placeholder="Buscar por nombre, email o comunidad..." />
+            </div>
+        </div>
+    </div>
+
+    <div class="table-container glass">
+        <table id="usersTable">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Comunidad</th>
+                    <th>Rol Actual</th>
+                    <th>Estado</th>
+                    <th>Registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="usersBody">
+                <!-- Data will be loaded via script -->
+                <tr class="loading-row">
+                    <td colspan="7">Cargando usuarios...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .admin-section {
+        padding: 2rem;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .header-left h2 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .header-left p {
+        color: rgba(255, 255, 255, 0.6);
+        font-style: italic;
+    }
+
+    .search-bar {
+        position: relative;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 0.8rem 1rem 0.8rem 3rem;
+        width: 350px;
+        transition: all 0.3s ease;
+    }
+
+    .search-bar i {
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .search-bar input {
+        background: transparent;
+        border: none;
+        color: white;
+        width: 100%;
+        outline: none;
+    }
+
+    .table-container {
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .glass {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        color: white;
+    }
+
+    th {
+        text-align: left;
+        padding: 1.2rem;
+        background: rgba(255, 255, 255, 0.05);
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+
+    td {
+        padding: 1.2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<script>
+    import { AuthManager } from '../../utils/auth';
+
+    async function loadUsers() {
+        try {
+            const users = await AuthManager.fetch('/users/');
+            const tbody = document.getElementById('usersBody');
+            if (!tbody) return;
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No hay usuarios registrados</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:1rem">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}" style="width:35px; height:35px; border-radius:50%" />
+                            <span>${user.name_user}</span>
+                        </div>
+                    </td>
+                    <td>${user.email}</td>
+                    <td><span class="badge blue">${user.community_name || 'Sin Comunidad'}</span></td>
+                    <td><span class="badge ${user.role}">${user.role}</span></td>
+                    <td><span class="status-dot ${user.status === 'active' ? 'active' : ''}"></span> ${user.status}</td>
+                    <td>${new Date(user.registration_date).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn-action" title="Editar"><i class="fas fa-edit"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            console.error('Error loading users:', error);
+            const tbody = document.getElementById('usersBody');
+            if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#ff4444">Error al cargar usuarios</td></tr>';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadUsers);
+</script>

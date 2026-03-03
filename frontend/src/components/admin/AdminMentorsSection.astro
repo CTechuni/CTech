@@ -1,0 +1,113 @@
+---
+/* AdminMentorsSection.astro */
+---
+
+<div class="mentors-section-container">
+    <div class="mentors-header">
+        <h2 class="section-title">Nuestros Mentores</h2>
+        <p class="section-subtitle">Gestión dinámica de expertos y especialistas.</p>
+    </div>
+
+    <div class="mentors-grid-container" id="mentorsGrid">
+        <!-- Renderizado dinámico -->
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <span>Cargando mentores...</span>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar/crear mentor (Fragmento simplificado para recuperación) -->
+<div class="modal-overlay" id="mentorModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Perfil del Mentor</h3>
+            <button class="close-btn" id="closeMentorModal">&times;</button>
+        </div>
+        <form id="mentorForm">
+            <div class="form-group">
+                <label for="mentorName">Nombre</label>
+                <input type="text" id="mentorName" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="mentorSpecialty">Especialidad</label>
+                <select id="mentorSpecialty" name="specialty" required>
+                    <option value="" disabled selected>Selecciona una especialidad</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="cancelMentor">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const mentorsGrid = document.getElementById('mentorsGrid');
+    const specialtySelect = document.getElementById('mentorSpecialty');
+
+    async function loadSpecialties() {
+        try {
+            const res = await fetch('http://localhost:8000/specialties/');
+            const specialties = await res.json();
+            
+            if (specialtySelect) {
+                // Preservar el placeholder
+                specialtySelect.innerHTML = '<option value="" disabled selected>Selecciona una especialidad</option>';
+                specialties.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.name;
+                    opt.textContent = s.name;
+                    specialtySelect.appendChild(opt);
+                });
+            }
+        } catch (err) {
+            console.error('Error cargando especialidades:', err);
+        }
+    }
+
+    // Inicialización
+    loadSpecialties();
+</script>
+
+<style>
+    .mentors-section-container {
+        padding: 2rem;
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        color: var(--color-primary-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .mentors-grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    /* Modal Styles Premium (Glassmorphism) */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 24px;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    }
+</style>

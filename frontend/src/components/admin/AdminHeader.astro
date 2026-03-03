@@ -1,0 +1,63 @@
+---
+// AdminHeader.astro
+interface Props {
+    title: string;
+    subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<header class="admin-header">
+    <div class="header-info">
+        <h1>{title}</h1>
+        {subtitle && <p class="subtitle">{subtitle}</p>}
+    </div>
+
+    <div class="header-actions">
+        <!-- User info placeholder -->
+        <div class="user-profile">
+            <span id="userName">Admin</span>
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin" alt="avatar" />
+        </div>
+    </div>
+</header>
+
+<style>
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .header-info h1 {
+        font-size: 2rem;
+        margin: 0;
+        background: linear-gradient(135deg, #fff 0%, #4facfe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+        color: rgba(255, 255, 255, 0.5);
+        margin: 0.2rem 0 0;
+        font-style: italic;
+    }
+
+    .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .user-profile img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+    }
+</style>

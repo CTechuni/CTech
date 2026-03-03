@@ -1,0 +1,28 @@
+---
+import AdminCoursesSection from '../components/admin/AdminCoursesSection.astro';
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+</head>
+<body>
+    <script type="module">
+        import { authManager } from '../utils/auth.js';
+
+        // proteger la ruta de administrador
+        if (!authManager.isAuthenticated() || authManager.getUser()?.role !== 'admin') {
+            // no autorizado: redirigir a login
+            window.location.href = '/';
+        }
+    </script>
+
+    <main>
+        <h1>Panel de Administración</h1>
+        <AdminCoursesSection />
+    </main>
+</body>
+</html>
