@@ -23,4 +23,4 @@ class EducationalContentResponse(EducationalContentBase):
     upload_date: datetime
 
     class Config:
-        from_attributes = True
+        orm_mode = True

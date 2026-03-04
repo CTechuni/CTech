@@ -10,4 +10,3 @@ class Community(Base):
     status_community = Column(String(150), nullable=False)
     code = Column(String(50), nullable=False)
     access_code = Column(String(50))
-    logo_url = Column(Text)
