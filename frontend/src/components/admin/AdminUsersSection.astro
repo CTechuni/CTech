@@ -1,174 +1,458 @@
 ---
 // AdminUsersSection.astro
-// Componente premium para la gestión de usuarios
+// Directorio de usuarios rediseñado
 ---
 
-<div class="admin-section users-section">
-    <div class="section-header">
-        <div class="header-left">
+<div class="admin-users-page">
+    <div class="section-top-header">
+        <div class="header-text">
             <h2>Gestión de Usuarios</h2>
-            <p>Directorio global de miembros de la plataforma CTech</p>
+            <p id="usersCount">0 usuarios totales</p>
         </div>
-        <div class="header-right">
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" id="userSearch" placeholder="Buscar por nombre, email o comunidad..." />
-            </div>
+        <div class="header-actions">
+            <button class="btn-import">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v11.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 1 1 1.06-1.06l3.22 3.22V3a.75.75 0 0 1 .75-.75Zm-9 13.5a.75.75 0 0 1 .75.75v2.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V16.5a.75.75 0 0 1 1.5 0v2.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V16.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" /></svg> Exportar
+            </button>
+            <button class="btn-add-user" id="addUserBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M5.25 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM2.25 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.633 13.067 13.067 0 0 1-6.761 1.87 13.062 13.062 0 0 1-6.76-1.87.75.75 0 0 1-.363-.63l-.002-.122ZM18.75 7.5a.75.75 0 0 0-1.5 0v2.25H15a.75.75 0 0 0 0 1.5h2.25V13.5a.75.75 0 0 0 1.5 0v-2.25H21a.75.75 0 0 0 0-1.5h-2.25V7.5Z" /></svg> Invitar Usuario
+            </button>
         </div>
     </div>
 
-    <div class="table-container glass">
-        <table id="usersTable">
-            <thead>
-                <tr>
-                    <th>Usuario</th>
-                    <th>Email</th>
-                    <th>Comunidad</th>
-                    <th>Rol Actual</th>
-                    <th>Estado</th>
-                    <th>Registro</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="usersBody">
-                <!-- Data will be loaded via script -->
-                <tr class="loading-row">
-                    <td colspan="7">Cargando usuarios...</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="filter-bar">
+        <div class="search-input-wrap">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 search-icon"><path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5zM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5z" clip-rule="evenodd" /></svg>
+            <input type="text" placeholder="Buscar por nombre, email o comunidad..." id="userSearch">
+        </div>
+        <div class="filter-actions">
+            <select id="roleFilter" class="filter-select">
+                <option value="all">Todos los Roles</option>
+                <option value="admin">Administradores</option>
+                <option value="mentor">Mentores</option>
+                <option value="leader">Líderes</option>
+                <option value="user">Usuarios</option>
+            </select>
+            <button class="filter-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M3.75 6.75a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75ZM6.75 12a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1-.75-.75ZM9.75 17.25a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" /></svg> Filtros</button>
+        </div>
+    </div>
+
+    <!-- TABLE CONTAINER -->
+    <div class="table-card-container">
+        <div class="table-wrap">
+            <table class="premium-table">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Estado</th>
+                        <th>Comunidad</th>
+                        <th>Rol</th>
+                        <th>Registro</th>
+                        <th>Acceso</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="usersBody">
+                    <!-- Dinámico -->
+                    <tr>
+                        <td colspan="7" class="loading-state">
+                            <div class="spinner-sm"></div>
+                            <span>Cargando directorio de CTech...</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-pagination">
+            <span id="showingText">Mostrando 0 de 0</span>
+            <div class="pagination-btns">
+                <button class="page-btn disabled"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" /></svg></button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" /></svg></button>
+            </div>
+        </div>
     </div>
 </div>
 
 <style>
-    .admin-section {
-        padding: 2rem;
-        animation: fadeIn 0.5s ease-out;
+    .admin-users-page {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
     }
 
-    .section-header {
+    .section-top-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2rem;
     }
 
-    .header-left h2 {
-        font-size: 1.8rem;
-        margin-bottom: 0.5rem;
-        background: linear-gradient(135deg, #fff 0%, #aaa 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    .header-text h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #1E293B;
+        margin: 0;
     }
 
-    .header-left p {
-        color: rgba(255, 255, 255, 0.6);
-        font-style: italic;
+    .header-text p {
+        font-size: 0.9rem;
+        color: #94A3B8;
+        margin: 0.2rem 0 0 0;
+        font-weight: 500;
     }
 
-    .search-bar {
-        position: relative;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+    .header-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn-import {
+        background: white;
+        color: #64748B;
+        border: 1px solid #E2E8F0;
+        padding: 0.75rem 1.25rem;
         border-radius: 12px;
-        padding: 0.8rem 1rem 0.8rem 3rem;
-        width: 350px;
-        transition: all 0.3s ease;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
     }
 
-    .search-bar i {
+    .btn-add-user {
+        background: #0073ff;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 115, 255, 0.2);
+    }
+
+    /* FILTER BAR */
+    .filter-bar {
+        display: flex;
+        justify-content: space-between;
+        gap: 1.5rem;
+    }
+
+    .search-input-wrap {
+        position: relative;
+        flex: 1;
+    }
+
+    .search-icon {
         position: absolute;
-        left: 1.2rem;
+        left: 1rem;
         top: 50%;
         transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.4);
+        color: #94A3B8;
     }
 
-    .search-bar input {
-        background: transparent;
-        border: none;
-        color: white;
+    .search-input-wrap input {
         width: 100%;
+        padding: 0.85rem 1rem 0.85rem 2.8rem;
+        border-radius: 12px;
+        border: 1px solid #E2E8F0;
+        background: white;
+        font-size: 0.9rem;
         outline: none;
     }
 
-    .table-container {
+    .filter-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .filter-select {
+        padding: 0 1rem;
+        border-radius: 12px;
+        border: 1px solid #E2E8F0;
+        background: white;
+        color: #64748B;
+        font-weight: 600;
+        font-size: 0.9rem;
+        outline: none;
+    }
+
+    .filter-btn {
+        padding: 0 1.25rem;
+        border-radius: 12px;
+        border: 1px solid #E2E8F0;
+        background: white;
+        color: #64748B;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        cursor: pointer;
+    }
+
+    /* TABLE CARD */
+    .table-card-container {
+        background: white;
         border-radius: 20px;
+        box-shadow: var(--card-shadow);
+        border: 1px solid #F1F5F9;
         overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .glass {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
-    }
+    .table-wrap { overflow-x: auto; }
 
-    table {
+    .premium-table {
         width: 100%;
         border-collapse: collapse;
-        color: white;
-    }
-
-    th {
         text-align: left;
-        padding: 1.2rem;
-        background: rgba(255, 255, 255, 0.05);
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .premium-table th {
+        padding: 1.25rem 1.5rem;
+        background: #F8FAFC;
+        color: #64748B;
+        font-weight: 700;
+        font-size: 0.75rem;
         text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid #F1F5F9;
+    }
+
+    .premium-table td {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid #F1F5F9;
+        color: #1E293B;
+        font-size: 0.9rem;
+        vertical-align: middle;
+    }
+
+    .user-cell {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #EFF6FF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #2563EB;
+        font-size: 0.9rem;
+        border: 2px solid white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .u-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .u-name { font-weight: 700; }
+    .u-email { font-size: 0.8rem; color: #94A3B8; }
+
+    /* BADGES */
+    .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #10B981;
+        background: #ECFDF5;
+        padding: 0.25rem 0.6rem;
+        border-radius: 50px;
+        width: fit-content;
+    }
+
+    .dot-sm { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    .role-badge {
+        font-size: 0.75rem;
+        font-weight: 800;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .role-badge.admin   { background: #FEF3C7; color: #D97706; }
+    .role-badge.mentor  { background: #F5F3FF; color: #7C3AED; }
+    .role-badge.leader  { background: #ECFDF5; color: #059669; }
+    .role-badge.user    { background: #EFF6FF; color: #2563EB; }
+
+    .comm-tag {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #64748B;
+        font-weight: 600;
         font-size: 0.85rem;
-        letter-spacing: 1px;
     }
 
-    td {
-        padding: 1.2rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    .comm-tag i { font-size: 0.6rem; color: #CBD5E1; }
+
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: none;
+        background: transparent;
+        color: #94A3B8;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
     }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+    .action-btn:hover { background: #F1F5F9; color: #0073ff; }
+
+    /* PAGINATION */
+    .table-pagination {
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
     }
+
+    #showingText { font-size: 0.85rem; color: #94A3B8; font-weight: 500; }
+
+    .pagination-btns { display: flex; gap: 0.5rem; }
+
+    .page-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid #E2E8F0;
+        background: white;
+        color: #64748B;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .page-btn.active { background: #0073ff; color: white; border-color: #0073ff; }
+    .page-btn.disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* LOADING SPINNER */
+    .loading-state {
+        text-align: center;
+        padding: 4rem !important;
+        color: #94A3B8;
+    }
+
+    .spinner-sm {
+        width: 24px;
+        height: 24px;
+        border: 2px solid #F1F5F9;
+        border-top-color: #0073ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 
 <script>
-    import { AuthManager } from '../../utils/auth';
+    import { authManager } from '../../utils/auth';
+    const auth = authManager;
 
-    async function loadUsers() {
+    let allUsers = [];
+
+    async function fetchData() {
         try {
-            const users = await AuthManager.fetch('/users/');
-            const tbody = document.getElementById('usersBody');
-            if (!tbody) return;
-
-            if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No hay usuarios registrados</td></tr>';
-                return;
-            }
-
-            tbody.innerHTML = users.map(user => `
-                <tr>
-                    <td>
-                        <div style="display:flex; align-items:center; gap:1rem">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}" style="width:35px; height:35px; border-radius:50%" />
-                            <span>${user.name_user}</span>
-                        </div>
-                    </td>
-                    <td>${user.email}</td>
-                    <td><span class="badge blue">${user.community_name || 'Sin Comunidad'}</span></td>
-                    <td><span class="badge ${user.role}">${user.role}</span></td>
-                    <td><span class="status-dot ${user.status === 'active' ? 'active' : ''}"></span> ${user.status}</td>
-                    <td>${new Date(user.registration_date).toLocaleDateString()}</td>
-                    <td>
-                        <button class="btn-action" title="Editar"><i class="fas fa-edit"></i></button>
-                    </td>
-                </tr>
-            `).join('');
+            const users = await auth.get('users');
+            allUsers = users || [];
+            renderUsers(allUsers);
+            updateCount(allUsers.length);
         } catch (error) {
-            console.error('Error loading users:', error);
-            const tbody = document.getElementById('usersBody');
-            if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#ff4444">Error al cargar usuarios</td></tr>';
+            console.error('Error:', error);
         }
     }
 
-    document.addEventListener('DOMContentLoaded', loadUsers);
+    function renderUsers(list) {
+        const tbody = document.getElementById('usersBody');
+        if (!tbody) return;
+
+        if (list.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 3rem">No hay usuarios que coincidan con la búsqueda</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = list.map(u => {
+            const role = (u.role || 'user').toLowerCase();
+            const initial = (u.name_user || 'U').substring(0, 1).toUpperCase();
+            const regDate = u.registration_date ? new Date(u.registration_date).toLocaleDateString('es-CO', {day:'2-digit', month:'short'}) : '-';
+            
+            return `
+                <tr>
+                    <td>
+                        <div class="user-cell">
+                            <div class="user-avatar">${initial}</div>
+                            <div class="u-info">
+                                <span class="u-name">${u.name_user || 'Sin Nombre'}</span>
+                                <span class="u-email">${u.email}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="status-badge">
+                            <span class="dot-sm"></span> Activo
+                        </div>
+                    </td>
+                    <td>
+                        <div class="comm-tag">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM6.262 6.072a8.25 8.25 0 1 0 10.562 10.562L6.072 6.262ZM2.045 12.001C2.045 17.499 6.501 21.956 12 21.956c5.499 0 9.956-4.457 9.956-9.956 0-5.498-4.457-9.955-9.956-9.955-5.499 0-9.955 4.457-9.955 9.955Z" clip-rule="evenodd" /></svg>
+                            <span>\${u.community_name || 'Global'}</span>
+                        </div>
+                    </td>
+                    <td><span class="role-badge ${role}">${role}</span></td>
+                    <td>${regDate}</td>
+                    <td>Hace 2h</td>
+                    <td>
+                        <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" clip-rule="evenodd" /></svg></button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        const showing = document.getElementById('showingText');
+        if (showing) showing.textContent = `Mostrando ${list.length} de ${allUsers.length}`;
+    }
+
+    function updateCount(n) {
+        const el = document.getElementById('usersCount');
+        if (el) el.textContent = `${n} usuarios totales`;
+    }
+
+    // Search and Filter
+    function applyFilters() {
+        const term = (document.getElementById('userSearch') as HTMLInputElement).value.toLowerCase();
+        const role = (document.getElementById('roleFilter') as HTMLSelectElement).value;
+
+        const filtered = allUsers.filter(u => {
+            const matchesSearch = u.name_user?.toLowerCase().includes(term) || u.email?.toLowerCase().includes(term);
+            const matchesRole = role === 'all' || u.role?.toLowerCase() === role;
+            return matchesSearch && matchesRole;
+        });
+
+        renderUsers(filtered);
+    }
+
+    document.getElementById('userSearch')?.addEventListener('input', applyFilters);
+    document.getElementById('roleFilter')?.addEventListener('change', applyFilters);
+
+    fetchData();
 </script>
+

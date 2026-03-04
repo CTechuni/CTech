@@ -1,0 +1,132 @@
+---
+// MentorSidebar.astro
+const menuItems = [
+    { icon: 'fas fa-tachometer-alt', label: 'Dashboard', path: '/mentor' },
+    { icon: 'fas fa-calendar-check', label: 'Mis Sesiones', path: '/mentor/sessions' },
+    { icon: 'fas fa-book', label: 'Mis Cursos', path: '/mentor/courses' },
+    { icon: 'fas fa-user-circle', label: 'Perfil', path: '/mentor/profile' },
+    { icon: 'fas fa-cog', label: 'Configuración', path: '/mentor/settings' },
+];
+---
+
+<aside class="mentor-sidebar glass">
+    <div class="sidebar-logo">
+        <img src="/logo-ctech.png" alt="CTech" />
+        <span>Mentor Portal</span>
+    </div>
+
+    <nav class="sidebar-nav">
+        {menuItems.map(item => (
+            <a href={item.path} class="nav-item">
+                <i class={item.icon}></i>
+                <span>{item.label}</span>
+            </a>
+        ))}
+    </nav>
+
+    <div class="sidebar-footer">
+        <button id="logoutBtn" class="nav-item logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Cerrar Sesión</span>
+        </button>
+    </div>
+</aside>
+
+<style>
+    .mentor-sidebar {
+        width: 280px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 1.5rem;
+        z-index: 1000;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .glass {
+        background: rgba(17, 12, 34, 0.85); /* Slightly purple tinted dark */
+        backdrop-filter: blur(20px);
+    }
+
+    .sidebar-logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 3rem;
+        padding-left: 0.5rem;
+    }
+
+    .sidebar-logo img { width: 40px; }
+    .sidebar-logo span { 
+        font-weight: 700; 
+        font-size: 1.2rem;
+        background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .sidebar-nav { flex: 1; }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.9rem 1.2rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        border-radius: 12px;
+        margin-bottom: 0.6rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-item:hover {
+        background: rgba(139, 92, 246, 0.1);
+        color: #ddd6fe;
+        transform: translateX(5px);
+    }
+
+    .nav-item.active {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
+        color: white;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .nav-item i { width: 22px; font-size: 1.1rem; }
+
+    .logout {
+        width: 100%;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        color: #f87171 !important;
+        justify-content: flex-start;
+    }
+
+    .logout:hover {
+        background: rgba(239, 68, 68, 0.1);
+    }
+</style>
+
+<script>
+    import { authManager } from '../../utils/auth';
+
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+        const auth = authManager;
+        auth.logout();
+        window.location.href = '/login';
+    });
+
+    // Mark active link
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-item').forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+    });
+</script>
+

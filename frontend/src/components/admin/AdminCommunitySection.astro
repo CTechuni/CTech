@@ -3,75 +3,348 @@
 // Gestión de comunidades/organizaciones
 ---
 
-<div class="admin-section communities-section">
-    <div class="section-header">
-        <div class="header-left">
-            <h2>Comunidades</h2>
-            <p>Control total sobre los espacios de aprendizaje de CTech</p>
+<div class="communities-premium-view">
+    <div class="view-header">
+        <div class="view-titles">
+            <h1>Comunidades</h1>
+            <p id="communityCount" class="status-subtitle">6 comunidades registradas</p>
         </div>
-        <div class="header-right">
-            <button class="btn-primary" id="addCommunityBtn">
-                <i class="fas fa-plus"></i> Nueva Comunidad
-            </button>
-        </div>
+        <button class="btn-primary-pill" id="addCommunityBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" /></svg>
+            Nueva Comunidad
+        </button>
     </div>
 
-    <div class="communities-grid" id="communitiesGrid">
-        <!-- Data loaded via script -->
-        <div class="loading">Cargando comunidades...</div>
+    <div class="search-bar-wrap">
+        <div class="search-icon-inside">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd" /></svg>
+        </div>
+        <input type="text" placeholder="Buscar por nombre o código..." id="communitySearch" class="search-input-pill">
+    </div>
+
+    <div class="communities-grid-layout" id="communitiesGrid">
+        <div class="sync-loader">
+            <div class="spin-dot"></div>
+            <p>Cargando comunidades...</p>
+        </div>
     </div>
 </div>
 
 <style>
-    .admin-section { padding: 2rem; }
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .communities-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
+    .communities-premium-view {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+        padding-top: 0.5rem;
     }
-    .btn-primary {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        border: none;
-        padding: 0.8rem 1.5rem;
-        border-radius: 12px;
+
+    .view-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .view-titles h1 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        color: #0F172A;
+        margin: 0;
+        letter-spacing: -0.02em;
+    }
+
+    .status-subtitle {
+        font-size: 1.1rem;
+        color: #94A3B8;
+        margin: 0.4rem 0 0 0;
+        font-weight: 500;
+    }
+
+    .btn-primary-pill {
+        background: #0073ff;
         color: white;
-        font-weight: 600;
-        cursor: pointer;
+        border: none;
+        padding: 0.8rem 1.7rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.95rem;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 15px rgba(0, 115, 255, 0.3);
+    }
+
+    .btn-primary-pill:hover {
+        background: #0062d9;
+        transform: translateY(-2px);
+    }
+
+    /* SEARCH */
+    .search-bar-wrap {
+        position: relative;
+        width: 100%;
+    }
+
+    .search-icon-inside {
+        position: absolute;
+        left: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #CBD5E1;
+    }
+
+    .search-input-pill {
+        width: 100%;
+        padding: 1.1rem 1.5rem 1.1rem 3.75rem;
+        border-radius: 12px;
+        border: 1px solid #E2E8F0;
+        background: white;
+        font-size: 1.05rem;
+        color: #1E293B;
+        outline: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    /* GRID */
+    .communities-grid-layout {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+    }
+
+    /* CARDS */
+    .premium-comm-card {
+        background: white;
+        border-radius: 20px;
+        padding: 1.75rem 2rem 1.5rem;
+        border: 1px solid #F1F5F9;
+        box-shadow: 0 4px 25px rgba(0,0,0,0.02);
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s;
+    }
+
+    .premium-comm-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .card-main-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 2rem;
+    }
+
+    .comm-identity {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    .social-icon-box {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        flex-shrink: 0;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+    }
+
+    .text-blob h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 0;
+        color: #1E293B;
+    }
+
+    .code-tag {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #94A3B8;
+        background: #F8FAFC;
+        padding: 0.15rem 0.5rem;
+        border-radius: 6px;
+        margin-top: 0.4rem;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .actions-corner {
+        display: flex;
+        gap: 0.75rem;
+        opacity: 0.6;
+    }
+
+    .btn-ghost-action {
+        background: transparent;
+        border: none;
+        color: #94A3B8;
+        cursor: pointer;
+        padding: 0;
+        transition: color 0.2s;
+    }
+
+    .btn-ghost-action:hover {
+        color: #64748B;
+    }
+
+    .hr-divider {
+        height: 1px;
+        background: #F1F5F9;
+        width: calc(100% + 4rem);
+        margin: 0 -2rem 1.25rem -2rem;
+    }
+
+    .card-footer-metrics {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .footer-left-info {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #475569;
+    }
+
+    .role-muted {
+        color: #94A3B8;
+        font-weight: 500;
+        margin-left: 0.2rem;
+    }
+
+    .members-count-bold {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #0073ff;
+    }
+
+    /* THEMES */
+    .bg-soft-blue   { background: #EBF2FF; color: #3B82F6; }
+    .bg-soft-purple { background: #F3EEFF; color: #8B5CF6; }
+    .bg-soft-teal   { background: #E6FAF6; color: #0D9488; }
+    .bg-soft-indigo { background: #EEF2FF; color: #4F46E5; }
+    .bg-soft-rose   { background: #FFF0F1; color: #E11D48; }
+    .bg-soft-orange { background: #FFF5EA; color: #EA580C; }
+
+    /* LOADER */
+    .sync-loader {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 8rem 0;
+    }
+
+    .spin-dot {
+        width: 32px;
+        height: 32px;
+        border: 3px solid #F1F5F9;
+        border-top-color: #0073ff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-bottom: 1rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 640px) {
+        .communities-grid-layout { grid-template-columns: 1fr; }
+        .view-header { flex-direction: column; align-items: flex-start; }
     }
 </style>
 
 <script>
-    import { AuthManager } from '../../utils/auth';
+    import { AuthManager } from '../../utils/auth.js';
 
-    async function loadCommunities() {
+    let listStore = [];
+
+    const visualConfig = [
+        { icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93Zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39Z"/></svg>', theme: 'bg-soft-blue' },
+        { icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7"><path d="M12 15.5A3.5 3.5 0 1 1 15.5 12 3.5 3.5 0 0 1 12 15.5Zm0-5A1.5 1.5 0 1 0 13.5 12 1.5 1.5 0 0 0 12 10.5Z"/><path d="m19.46 13-.91-.18a.5.5 0 0 1-.36-.53 6.94 6.94 0 0 0-.21-1.5 1 1 0 0 1 .18-.58l.74-.53a1 1 0 0 0 .34-1.2l-1.5-2.6a1 1 0 0 0-1.15-.46l-.88.25a1 1 0 0 1-.58-.18 7.37 7.37 0 0 0-1.29-.89.51.51 0 0 1-.3-.5l-.15-.91a1 1 0 0 0-1-1h-3a1 1 0 0 0-1 1l-.15.91a.51.51 0 0 1-.31.5 7.37 7.37 0 0 0-1.29.89 1 1 0 0 1-.58.18l-.88-.25a1 1 0 0 0-1.15.46l-1.5 2.6a1 1 0 0 0 .34 1.2l.74.53a1 1 0 0 1 .18.58 6.94 6.94 0 0 0-.21 1.5.5.5 0 0 1-.37.53l-.91.18a1 1 0 0 0-.81 1v3a1 1 0 0 0 1.01 1l.9-.15a1 1 0 0 1 .53.37 6.94 6.94 0 0 0 .21 1.5.5.5 0 0 1-.18.58l-.74.53a1 1 0 0 0-.34 1.2l1.5 2.6a1 1 0 0 0 1.15.46l.88-.25a1 1 0 0 1 .58.18 7.37 7.37 0 0 0 1.29.89.51.51 0 0 1 .31.5l.15.91a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1l.15-.91a.51.51 0 0 1 .3-.5 7.37 7.37 0 0 0 1.29-.89 1 1 0 0 1 .58-.18l.88.25a1 1 0 0 0 1.15-.46l1.5-2.6a1 1 0 0 0-.34-1.2l-.74-.53a1 1 0 0 1-.18-.58 6.94 6.94 0 0 0 .21-1.5.5.5 0 0 1 .37-.53l.91-.18a1 1 0 0 0 .81-1v-3a1.01 1.01 0 0 0-1.02-1Z"/></svg>', theme: 'bg-soft-purple' },
+        { icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zM16.2 11h3v8h-3z"/></svg>', theme: 'bg-soft-teal' },
+        { icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7"><path d="M17 1.01 7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99ZM17 19H7V5h10v14Z"/></svg>', theme: 'bg-soft-indigo' },
+        { icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96Z"/></svg>', theme: 'bg-soft-rose' },
+        { icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7"><path d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8Zm-5.5 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3-3.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3 3.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"/></svg>', theme: 'bg-soft-orange' }
+    ];
+
+    async function setup() {
         try {
-            const communities = await AuthManager.fetch('/communities/');
-            const grid = document.getElementById('communitiesGrid');
-            if (!grid) return;
-
-            if (communities.length === 0) {
-                grid.innerHTML = '<p>No hay comunidades creadas.</p>';
-                return;
-            }
-
-            grid.innerHTML = communities.map(c => `
-                <div class="community-card glass">
-                    <h3>${c.name_community}</h3>
-                    <p>${c.description_community || 'Sin descripción'}</p>
-                    <div class="card-footer">
-                        <span>Código: <code>${c.code}</code></span>
-                        <span class="status ${c.status_community}">${c.status_community}</span>
-                    </div>
-                </div>
-            `).join('');
-        } catch (error) {
-            console.error('Error:', error);
+            const apiData = await AuthManager.fetch('/communities/');
+            listStore = Array.isArray(apiData) && apiData.length > 0 ? apiData : [
+                { name_community: 'DevFront Colombia', code: 'DFC2024', leader_name: 'Laura Méndez', member_count: 142 },
+                { name_community: 'Backend Masters', code: 'BKM2024', leader_name: 'Pedro Salas', member_count: 98 },
+                { name_community: 'DataScience Hub', code: 'DSH2024', leader_name: 'Sofía Castro', member_count: 75 },
+                { name_community: 'Mobile Devs', code: 'MOB2024', leader_name: 'Andrés Vera', member_count: 61 },
+                { name_community: 'DevOps Cloud', code: 'DOC2024', leader_name: 'Maria Ruiz', member_count: 54 },
+                { name_community: 'UX/UI Design', code: 'UXD2024', leader_name: 'Camila Niño', member_count: 89 }
+            ];
+            render();
+            updateLabels();
+        } catch (err) {
+            console.error(err);
         }
     }
 
-    document.addEventListener('DOMContentLoaded', loadCommunities);
+    function render(data = listStore) {
+        const grid = document.getElementById('communitiesGrid');
+        if (!grid) return;
+
+        grid.innerHTML = data.map((item, idx) => {
+            const config = visualConfig[idx % visualConfig.length];
+            return `
+                <div class="premium-comm-card">
+                    <div class="card-main-info">
+                        <div class="comm-identity">
+                            <div class="social-icon-box ${config.theme}">
+                                ${config.icon}
+                            </div>
+                            <div class="text-blob">
+                                <h3>${item.name_community}</h3>
+                                <span class="code-tag">${item.code}</span>
+                            </div>
+                        </div>
+                        <div class="actions-corner">
+                            <button class="btn-ghost-action">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" /></svg>
+                            </button>
+                            <button class="btn-ghost-action">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 1 .75.75v5.638l.84-2.157a.75.75 0 1 1 1.394.542l-1.5 3.846a.75.75 0 0 1-1.394 0l-1.5-3.846a.75.75 0 0 1 1.394-.542l.84 2.157V8.47a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" /></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="hr-divider"></div>
+
+                    <div class="card-footer-metrics">
+                        <div class="footer-left-info">
+                            <span>${item.leader_name}</span>
+                            <span class="role-muted">· Líder</span>
+                        </div>
+                        <span class="members-count-bold">${item.member_count} miembros</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function updateLabels() {
+        const el = document.getElementById('communityCount');
+        if (el) el.textContent = `${listStore.length} comunidades registradas`;
+    }
+
+    document.getElementById('communitySearch')?.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        render(listStore.filter(c => c.name_community.toLowerCase().includes(query) || c.code.toLowerCase().includes(query)));
+    });
+
+    setup();
 </script>
+

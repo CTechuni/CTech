@@ -9,7 +9,7 @@ export const API_CONFIG = {
     // Endpoints de autenticación
     AUTH: {
         LOGIN: '/auth/login',
-        REGISTER: '/auth/register',
+        REGISTER: '/users/register',
         LOGOUT: '/auth/logout',
         REFRESH: '/auth/refresh',
         FORGOT_PASSWORD: '/auth/forgot-password',
@@ -60,7 +60,7 @@ export function buildApiUrl(endpoint) {
 
 // Función helper para hacer requests autenticados
 export async function authenticatedRequest(url, options = {}) {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken'); // ✅ Consistente con AuthManager
     
     const defaultOptions = {
         headers: {
@@ -78,7 +78,18 @@ export async function authenticatedRequest(url, options = {}) {
         }
     };
     
-    return fetch(url, finalOptions);
+    const response = await fetch(url, finalOptions);
+    
+    // Handle 401 Unauthorized
+    if (response.status === 401) {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+        localStorage.removeItem('lastAuthToken');
+        window.location.href = '/';
+        return null;
+    }
+    
+    return response;
 }
 
 // Función para manejar respuestas de la API

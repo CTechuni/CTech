@@ -1,7 +1,123 @@
 ---
-import UserPage from "./user.astro"; // reuse existing dashboard
+import UserLayout from "../../layouts/UserLayout.astro";
 const title = "Mi Perfil";
 ---
 
-<!-- Forward to the user dashboard component for profile view -->
-<UserPage />
+<UserLayout title={title} subtitle="Personaliza tu espacio y gestiona tu cuenta.">
+    <div class="user-profile-grid">
+        <div class="profile-card glass-morphic">
+            <div class="avatar-edit">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" alt="avatar" />
+                <button class="edit-btn"><i class="fas fa-camera"></i></button>
+            </div>
+            <h2 id="displayUserName">Usuario</h2>
+            <p class="user-id">ID: #CT-2024-001</p>
+            
+            <div class="user-stats">
+                <div class="stat">
+                    <span>12</span>
+                    <label>Cursos</label>
+                </div>
+                <div class="stat">
+                    <span>850</span>
+                    <label>Puntos</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-card glass-morphic">
+            <h3>Información de la Cuenta</h3>
+            <div class="info-list">
+                <div class="info-item">
+                    <label>Correo Electrónico</label>
+                    <p>usuario@ctech.com</p>
+                </div>
+                <div class="info-item">
+                    <label>Rol en Plataforma</label>
+                    <p>Estudiante</p>
+                </div>
+                <button class="update-btn">Actualizar Información</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .user-profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .glass-morphic {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 2.5rem;
+        }
+
+        .profile-card { text-align: center; }
+
+        .avatar-edit {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .avatar-edit img {
+            width: 100%;
+            height: 100%;
+            border-radius: 40px;
+            border: 4px solid rgba(245, 158, 11, 0.2);
+            object-fit: cover;
+        }
+
+        .edit-btn {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: #f59e0b;
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .user-id { color: rgba(255, 255, 255, 0.3); font-size: 0.85rem; margin-top: 0.5rem; }
+
+        .user-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat span { display: block; font-size: 1.4rem; font-weight: 800; color: #f59e0b; }
+        .stat label { font-size: 0.8rem; color: rgba(255, 255, 255, 0.4); text-transform: uppercase; font-weight: 700; }
+
+        .info-list { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem; }
+        .info-item label { display: block; font-size: 0.85rem; color: rgba(255, 255, 255, 0.4); margin-bottom: 0.4rem; }
+        .info-item p { font-size: 1.1rem; color: white; font-weight: 500; }
+
+        .update-btn {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+            padding: 1rem;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .update-btn:hover { background: #f59e0b; color: white; }
+
+        @media (max-width: 900px) { .user-profile-grid { grid-template-columns: 1fr; } }
+    </style>
+</UserLayout>

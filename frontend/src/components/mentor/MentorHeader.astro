@@ -1,0 +1,139 @@
+---
+// MentorHeader.astro
+interface Props {
+    title: string;
+    subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<header class="mentor-header">
+    <div class="header-info">
+        <h1>{title}</h1>
+        {subtitle && <p class="subtitle">{subtitle}</p>}
+    </div>
+
+    <div class="header-actions">
+        <div class="notifications">
+            <i class="fas fa-bell"></i>
+            <span class="badge">3</span>
+        </div>
+        <div class="user-profile">
+            <div class="user-info">
+                <span id="userName">Mentor Name</span>
+                <span class="role-tag">Mentor</span>
+            </div>
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=mentor" alt="avatar" />
+        </div>
+    </div>
+</header>
+
+<style>
+    .mentor-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2.5rem;
+        padding: 1rem 0;
+    }
+
+    .header-info h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0;
+        background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+        color: rgba(255, 255, 255, 0.4);
+        margin: 0.3rem 0 0;
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .notifications {
+        position: relative;
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.6);
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .notifications:hover { color: #a78bfa; }
+
+    .badge {
+        position: absolute;
+        top: -5px;
+        right: -8px;
+        background: #ef4444;
+        color: white;
+        font-size: 0.7rem;
+        padding: 2px 5px;
+        border-radius: 10px;
+        border: 2px solid #0f172a;
+    }
+
+    .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 0.6rem 1.2rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.3s ease;
+    }
+
+    .user-profile:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(167, 139, 250, 0.3);
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .user-info #userName {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: white;
+    }
+
+    .role-tag {
+        font-size: 0.75rem;
+        color: #a78bfa;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .user-profile img {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 2px solid rgba(167, 139, 250, 0.2);
+    }
+</style>
+
+<script>
+    import { authManager } from '../../utils/auth';
+    const auth = authManager;
+    const user = auth.getUser();
+    if (user) {
+        document.getElementById('userName').textContent = user.name_user || user.name;
+    }
+</script>
+

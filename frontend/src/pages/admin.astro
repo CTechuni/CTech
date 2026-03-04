@@ -1,28 +1,512 @@
 ---
-import AdminCoursesSection from '../components/admin/AdminCoursesSection.astro';
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+const title = 'Dashboard';
+const subtitle = 'Global';
 ---
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración</title>
-</head>
-<body>
-    <script type="module">
-        import { authManager } from '../utils/auth.js';
+<AdminLayout title={title} subtitle={subtitle}>
+  <section class="dashboard-section">
+    <header class="dashboard-page-header">
+      <p class="dashboard-kicker">Dashboard</p>
+      <h2 class="dashboard-title">Dashboard Global</h2>
+      <p class="dashboard-subtitle">Resumen de toda la plataforma CTech</p>
+    </header>
 
-        // proteger la ruta de administrador
-        if (!authManager.isAuthenticated() || authManager.getUser()?.role !== 'admin') {
-            // no autorizado: redirigir a login
-            window.location.href = '/';
-        }
-    </script>
+    <!-- Resumen de métricas principales -->
+    <div class="summary-grid">
+      <article class="summary-card">
+        <div class="summary-icon summary-icon-users">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0V18a7.125 7.125 0 0114.25 0v1.125" /></svg>
+        </div>
+        <div class="summary-content">
+          <p class="summary-label">Total Usuarios</p>
+          <p class="summary-value">519</p>
+          <p class="summary-trend trend-up">↑ 12% este mes</p>
+        </div>
+      </article>
 
-    <main>
-        <h1>Panel de Administración</h1>
-        <AdminCoursesSection />
-    </main>
-</body>
-</html>
+      <article class="summary-card">
+        <div class="summary-icon summary-icon-communities">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 6.75A3.75 3.75 0 0114.25 9h.5A3.25 3.25 0 0118 12.25V13.5H3a.75.75 0 01-.75-.75v-6z" clip-rule="evenodd" /><path d="M3 15h15v2.25A3.75 3.75 0 0114.25 21H6.75A3.75 3.75 0 013 17.25V15z" /></svg>
+        </div>
+        <div class="summary-content">
+          <p class="summary-label">Comunidades</p>
+          <p class="summary-value">6</p>
+          <p class="summary-trend trend-up">↑ 1 este mes</p>
+        </div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-icon summary-icon-courses">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3.75 4.5A1.75 1.75 0 015.5 2.75h13a.75.75 0 01.75.75v13.5a.75.75 0 01-1.2.6L16.5 15l-7.5 4.5-7.5-4.5V4.5z" /></svg>
+        </div>
+        <div class="summary-content">
+          <p class="summary-label">Cursos activos</p>
+          <p class="summary-value">6</p>
+          <p class="summary-trend trend-up">↑ 3 este mes</p>
+        </div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-icon summary-icon-events">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3a.75.75 0 011.5 0v1.5h.75a3 3 0 013 3v12.75a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3h.75V3a.75.75 0 01.75-.75Zm-2.9 7.5h16.3V7.5a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v2.25Z" clip-rule="evenodd" /></svg>
+        </div>
+        <div class="summary-content">
+          <p class="summary-label">Eventos este mes</p>
+          <p class="summary-value">6</p>
+          <p class="summary-trend trend-up">↑ 5 este mes</p>
+        </div>
+      </article>
+    </div>
+
+    <!-- Gráficas principales -->
+    <div class="charts-grid">
+      <section class="chart-card wide">
+        <header class="chart-header">
+          <div>
+            <h2>Crecimiento de Usuarios</h2>
+            <p>Últimos 7 meses</p>
+          </div>
+          <span class="chip chip-success">+8.2%</span>
+        </header>
+        <canvas id="usersGrowthChart" height="120"></canvas>
+      </section>
+
+      <section class="chart-card">
+        <header class="chart-header">
+          <div>
+            <h2>Distribución de Roles</h2>
+            <p>Composición de usuarios</p>
+          </div>
+        </header>
+        <div class="roles-chart-wrapper">
+          <canvas id="rolesChart" height="160"></canvas>
+          <ul class="roles-legend">
+            <li><span class="dot dot-users"></span>Usuarios <span class="legend-count">6</span></li>
+            <li><span class="dot dot-mentors"></span>Mentores <span class="legend-count">2</span></li>
+            <li><span class="dot dot-leaders"></span>Líderes <span class="legend-count">6</span></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Sección inferior: miembros por comunidad + próximos eventos -->
+    <div class="bottom-grid">
+      <section class="chart-card">
+        <header class="chart-header">
+          <div>
+            <h2>Miembros por Comunidad</h2>
+            <p>Total de registrados</p>
+          </div>
+        </header>
+        <canvas id="membersPerCommunityChart" height="120"></canvas>
+      </section>
+
+      <section class="events-panel">
+        <header class="chart-header">
+          <div>
+            <h2>Próximos Eventos</h2>
+            <p>Eventos programados</p>
+          </div>
+        </header>
+        <ul class="events-list">
+          <li>
+            <div class="event-main">
+              <h3>Meetup DevFront #12</h3>
+              <p>DevFront Colombia · 5 Mar 2026 · 7:00 PM</p>
+            </div>
+            <span class="badge-pill badge-online">online</span>
+          </li>
+          <li>
+            <div class="event-main">
+              <h3>Hackathon DataScience</h3>
+              <p>DataScience Hub · 9 Mar 2026 · 9:00 AM</p>
+            </div>
+            <span class="badge-pill badge-presencial">presencial</span>
+          </li>
+          <li>
+            <div class="event-main">
+              <h3>Workshop Docker &amp; K8s</h3>
+              <p>DevOps Cloud · 13 Mar 2026 · 6:00 PM</p>
+            </div>
+            <span class="badge-pill badge-online">online</span>
+          </li>
+          <li>
+            <div class="event-main">
+              <h3>UX Research Talk</h3>
+              <p>UX/UI Design · 17 Mar 2026 · 5:30 PM</p>
+            </div>
+            <span class="badge-pill badge-online">online</span>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </section>
+
+  <style>
+    .dashboard-section {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .dashboard-page-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .dashboard-kicker {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .dashboard-title {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .dashboard-subtitle {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+
+    .summary-card {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: var(--card-shadow);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .summary-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .summary-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .summary-icon-users { background: #3b82f6; }
+    .summary-icon-communities { background: #0ea5e9; }
+    .summary-icon-courses { background: #6366f1; }
+    .summary-icon-events { background: #f97316; }
+
+    .summary-label {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin: 0 0 0.15rem 0;
+    }
+
+    .summary-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0 0 0.15rem 0;
+      color: #0f172a;
+    }
+
+    .summary-trend {
+      font-size: 0.75rem;
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .trend-up {
+      color: #16a34a;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.1fr);
+      gap: 1.5rem;
+    }
+
+    .chart-card,
+    .events-panel {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: var(--card-shadow);
+      padding: 1.5rem 1.5rem 1.25rem;
+    }
+
+    .chart-card.wide {
+      min-height: 260px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .chart-header h2 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .chart-header p {
+      margin: 0.15rem 0 0;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 0.25rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+
+    .chip-success {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #bbf7d0;
+    }
+
+    .roles-chart-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .roles-legend {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.8rem;
+      color: #64748b;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .roles-legend li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      min-width: 140px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-right: 0.5rem;
+    }
+
+    .dot-users { background: #3b82f6; }
+    .dot-mentors { background: #22c55e; }
+    .dot-leaders { background: #f97316; }
+
+    .legend-count {
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.3fr);
+      gap: 1.5rem;
+    }
+
+    .events-panel {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 0.5rem;
+    }
+
+    .events-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .events-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      gap: 0.75rem;
+    }
+
+    .events-list li:last-child {
+      border-bottom: none;
+    }
+
+    .event-main h3 {
+      margin: 0 0 0.1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .event-main p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    .badge-pill {
+      border-radius: 999px;
+      padding: 0.15rem 0.7rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-online {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .badge-presencial {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    /* Responsive admin dashboard */
+    @media (max-width: 1200px) {
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .charts-grid {
+        grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.3fr);
+      }
+
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .roles-chart-wrapper {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+  <script>
+    // Usa Chart.js cargado desde AdminLayout
+    window.addEventListener('DOMContentLoaded', () => {
+      // Línea: crecimiento de usuarios
+      const growthCtx = document.getElementById('usersGrowthChart');
+      if (growthCtx && window.Chart) {
+        // eslint-disable-next-line no-new
+        new window.Chart(growthCtx, {
+          type: 'line',
+          data: {
+            labels: ['Sep', 'Oct', 'Nov', 'Dic', 'Ene', 'Feb', 'Mar'],
+            datasets: [{
+              label: 'Usuarios',
+              data: [120, 180, 240, 310, 380, 460, 520],
+              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              tension: 0.35,
+              fill: true,
+              pointRadius: 3,
+            }],
+          },
+          options: {
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { display: false } },
+              y: { grid: { color: '#e5e7eb' }, ticks: { stepSize: 100 } },
+            },
+          },
+        });
+      }
+
+      // Donut: distribución de roles
+      const rolesCtx = document.getElementById('rolesChart');
+      if (rolesCtx && window.Chart) {
+        // eslint-disable-next-line no-new
+        new window.Chart(rolesCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Usuarios', 'Mentores', 'Líderes'],
+            datasets: [{
+              data: [6, 2, 6],
+              backgroundColor: ['#3b82f6', '#22c55e', '#f97316'],
+            }],
+          },
+          options: {
+            cutout: '65%',
+            plugins: { legend: { display: false } },
+          },
+        });
+      }
+
+      // Barras: miembros por comunidad
+      const membersCtx = document.getElementById('membersPerCommunityChart');
+      if (membersCtx && window.Chart) {
+        // eslint-disable-next-line no-new
+        new window.Chart(membersCtx, {
+          type: 'bar',
+          data: {
+            labels: ['DevFront', 'Backend', 'DataScience', 'Mobile', 'DevOps', 'UX/UI'],
+            datasets: [{
+              label: 'Miembros',
+              data: [142, 98, 75, 61, 54, 89],
+              backgroundColor: '#3b82f6',
+              borderRadius: 6,
+            }],
+          },
+          options: {
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { display: false } },
+              y: { grid: { color: '#e5e7eb' }, ticks: { stepSize: 50 } },
+            },
+          },
+        });
+      }
+    });
+  </script>
+</AdminLayout>
+

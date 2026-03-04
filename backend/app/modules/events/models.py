@@ -12,5 +12,7 @@ class Event(Base):
     place = Column(String(155), nullable=False)
     url_form = Column(String(255), nullable=False)
     image = Column(String(255), nullable=False)
+    capacity = Column(Integer, nullable=False, default=0)
     created_by = Column(Integer, ForeignKey("users.id"))
-    status = Column(String(50), nullable=False)
+    status = Column(String(50), nullable=False, default="active")
+

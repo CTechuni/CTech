@@ -2,4 +2,13 @@
 import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  vite: {
+    esbuild: {
+      target: 'es2020',
+    },
+    build: {
+      target: 'es2020',
+    },
+  },
+});

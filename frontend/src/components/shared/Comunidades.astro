@@ -1,0 +1,147 @@
+---
+
+---
+
+<section class="comunidades" id="comunidades">
+    <h2>Nuestras Comunidades</h2>
+    <p class="comunidades-sub">+6 comunidades activas con más de 500 miembros</p>
+    <div class="comunidades-grid">
+        <div class="comunidad-item">
+            <div class="comunidad-icon" aria-hidden="true"></div>
+            <span class="comunidad-name">DevFront Colombia</span>
+        </div>
+        <div class="comunidad-item">
+            <div class="comunidad-icon" aria-hidden="true"></div>
+            <span class="comunidad-name">Backend Masters</span>
+        </div>
+        <div class="comunidad-item">
+            <div class="comunidad-icon" aria-hidden="true"></div>
+            <span class="comunidad-name">DataScience Hub</span>
+        </div>
+        <div class="comunidad-item">
+            <div class="comunidad-icon" aria-hidden="true"></div>
+            <span class="comunidad-name">Mobile Devs</span>
+        </div>
+        <div class="comunidad-item">
+            <div class="comunidad-icon" aria-hidden="true"></div>
+            <span class="comunidad-name">DevOps Cloud</span>
+        </div>
+        <div class="comunidad-item">
+            <div class="comunidad-icon" aria-hidden="true"></div>
+            <span class="comunidad-name">UX/UI Design</span>
+        </div>
+        <div class="comunidad-item">
+            <div class="comunidad-icon" aria-hidden="true"></div>
+            <span class="comunidad-name">AI Research</span>
+        </div>
+        <div class="comunidad-item">
+            <div class="comunidad-icon" aria-hidden="true"></div>
+            <span class="comunidad-name">Blockchain Dev</span>
+        </div>
+    </div>
+    <div class="join-btn-container">
+        <a href="/user/communities" class="join-btn">Unirse a una comunidad →</a>
+    </div>
+</section>
+
+<style>
+    .comunidades {
+        width: 100%;
+        overflow: hidden;
+        padding: 4rem 1rem 5rem;
+        position: relative;
+        background: #fff;
+        text-align: center;
+    }
+    .comunidades h2 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: #1f2937;
+    }
+    .comunidades-sub {
+        color: #666;
+        margin-bottom: 2rem;
+    }
+
+    .comunidades-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 1.5rem;
+        max-width: 900px;
+        margin: 0 auto;
+        justify-items: center;
+    }
+
+    .comunidad-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        text-align: center;
+    }
+
+    .comunidad-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e2e8f0;
+    }
+
+    .comunidad-name {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #374151;
+        line-height: 1.2;
+        max-width: 100px;
+    }
+
+    .join-btn-container {
+        text-align: center;
+        margin-top: 2.5rem;
+    }
+    .join-btn {
+        display: inline-block;
+        padding: 0.9rem 1.8rem;
+        background: var(--color-azure-radiant);
+        color: #fff;
+        border-radius: 9999px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.2s, transform 0.2s;
+    }
+    .join-btn:hover { background: #005ceb; transform: translateY(-2px); }
+
+    /* Responsive Comunidades */
+    @media (max-width: 768px) {
+        .comunidades-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+        .comunidad-icon {
+            width: 70px;
+            height: 70px;
+        }
+        .comunidad-name {
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .comunidades-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        .comunidad-icon {
+            width: 64px;
+            height: 64px;
+        }
+        .comunidad-name {
+            font-size: 0.7rem;
+            max-width: 90px;
+        }
+    }
+</style>
+
+<!-- JavaScript removed: Use Astro or client-side frameworks for dynamic behavior -->

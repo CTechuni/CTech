@@ -1,0 +1,489 @@
+---
+// Astro component script (if needed)
+---
+
+<form class="signup-form" id="signupForm">
+    <div id="signupGeneralError" class="general-error-message"></div>
+
+    <div class="form-group">
+        <label for="community">Comunidad CTech</label>
+        <select id="community" name="community">
+            <option value="">Selecciona una comunidad</option>
+            <!-- TODO: Las comunidades se cargarán dinámicamente desde el backend -->
+            <option value="Tech-community">Tech community Web</option>
+            <option value="AWSUG-Medellin">AW UG Medellin</option>
+            <option value="Pioneras">Pioneras</option>
+        </select>
+        <span class="error-message" id="communityError"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="inviteCode">Código de invitación</label>
+        <input 
+            type="text" 
+            id="inviteCode" 
+            name="inviteCode" 
+            placeholder="Ingresa tu código de invitación"
+        >
+        <span class="error-message" id="inviteCodeError"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="fullName">Nombre completo</label>
+        <input 
+            type="text" 
+            id="fullName" 
+            name="fullName" 
+            placeholder="Tu nombre completo"
+        >
+        <span class="error-message" id="fullNameError"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input 
+            type="email" 
+            id="email_signup" 
+            name="email" 
+            placeholder="tu@email.com"
+        >
+        <span class="error-message" id="emailSignupError"></span>
+    </div>
+
+        <div class="form-group">
+            <label for="password_signup">Contraseña</label>
+            <input type="password" id="password_signup" name="password" placeholder="Mínimo 8 caracteres" required>
+            <div class="password-strength-meter">
+                <div class="strength-bar" id="strengthBar"></div>
+            </div>
+            <span class="error-message" id="passwordSignupError"></span>
+        </div>
+
+    <div class="form-group">
+        <label for="confirmPassword">Confirmar contraseña</label>
+        <input 
+            type="password" 
+            id="confirmPassword" 
+            name="confirmPassword" 
+            placeholder="••••••"
+            minlength="8"
+        >
+        <span class="error-message" id="confirmPasswordError"></span>
+    </div>
+
+    <div class="form-options">
+        <label class="checkbox-container">
+            <input type="checkbox" name="terms" id="terms">
+            <span class="checkmark"></span>
+            Acepto los <a href="#" class="terms-link">términos y condiciones</a>
+        </label>
+        <span class="error-message" id="termsError"></span>
+    </div>
+
+    <button type="submit" class="signup-btn">
+        Crear Cuenta
+    </button>
+
+    <div class="divider">
+        <span>o</span>
+    </div>
+
+    <div class="social-signup">
+        <button type="button" class="social-btn google-btn">
+            <span class="material-icons">account_circle</span>
+            Registrarse con Google
+        </button>
+        <button type="button" class="social-btn github-btn">
+            <span class="material-icons">code</span>
+            Registrarse con GitHub
+        </button>
+    </div>
+
+    <div class="login-link">
+        <p>¿Ya tienes cuenta? <a href="#" onclick="window.closeModal('signupModal'); window.openModal('loginModal')">Inicia sesión aquí</a></p>
+    </div>
+</form>
+
+<style>
+    .signup-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        color: var(--color-primary-dark);
+        font-size: 0.9rem;
+        margin: 0 1rem 0 1rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--color-medium-grey);
+        border-radius: 25px;
+        font-size: 0.9rem;
+        transition: border-color 0.3s ease;
+        background-color: var(--color-white);
+    }
+
+    .form-group select {
+        cursor: pointer;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--color-azure-radiant);
+    }
+
+    .form-group input.error,
+    .form-group select.error {
+        border-color: #ef4444;
+        background-color: #fef2f2;
+    }
+
+    .error-message {
+        color: #ef4444;
+        font-size: 0.8rem;
+        margin-left: 1rem;
+        margin-top: -0.1rem;
+        display: none;
+    }
+
+    .error-message.visible {
+        display: block;
+    }
+
+    .password-strength-meter {
+        height: 6px;
+        background-color: #e2e8f0;
+        border-radius: 4px;
+        margin: 0.2rem 1rem 0.5rem;
+        overflow: hidden;
+        display: none;
+    }
+
+    .strength-bar {
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s ease, background-color 0.3s ease;
+    }
+
+    .strength-weak { width: 33%; background-color: #ef4444; }
+    .strength-medium { width: 66%; background-color: #f59e0b; }
+    .strength-strong { width: 100%; background-color: #10b981; }
+
+    .general-error-message {
+        background-color: #fef2f2;
+        color: #ef4444;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        border: 1px solid #fee2e2;
+        margin-bottom: 1rem;
+        display: none;
+        text-align: center;
+    }
+
+    .general-error-message.visible {
+        display: block;
+    }
+
+    .form-options {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+    }
+
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+    }
+
+    .terms-link {
+        color: var(--color-azure-radiant);
+        text-decoration: none;
+    }
+
+    .terms-link:hover {
+        text-decoration: underline;
+    }
+
+    .signup-btn {
+        padding: 0.6rem 1.5rem;
+        background-color: var(--color-azure-radiant);
+        color: var(--color-white);
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-align: center;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 0.5rem;
+    }
+
+    .signup-btn:hover {
+        background-color: var(--color-azure-radiant);
+    }
+
+    .signup-btn:active {
+        background-color: var(--color-blue-grey);
+    }
+
+    .signup-btn:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+    }
+
+    .divider {
+        text-align: center;
+        position: relative;
+        color: #666;
+        font-size: 0.9rem;
+        margin: 1rem 0;
+    }
+
+    .divider::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background-color: #e9ecef;
+        z-index: 1;
+    }
+
+    .divider span {
+        background-color: var(--color-white);
+        padding: 0 1rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .social-signup {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 25px;
+        background-color: var(--color-white);
+        color: #333;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .social-btn:hover {
+        border-color: #98989849;
+        background-color: var(--color-white);
+    }
+
+    .social-btn:active {
+        background-color: #e4e4e4;
+        color: var(--color-primary-dark);
+        border-color: #e4e4e4;
+    }
+
+    .social-btn .material-icons {
+        font-size: 1.2rem;
+    }
+
+    .login-link {
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--color-primary-dark);
+        margin-top: 1rem;
+    }
+
+    .login-link a {
+        color: var(--color-azure-radiant);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+
+
+</style>
+
+<script type="module">
+document.addEventListener('DOMContentLoaded', () => {
+    // Intentar importar authManager de forma dinámica (evita errores si el bundler lo trata distinto)
+    async function getAuthManager() {
+        try {
+            const mod = await import('../../utils/auth.js');
+            return mod.authManager ?? mod.default ?? null;
+        } catch (err) {
+            console.warn('No se pudo importar authManager:', err);
+            return null;
+        }
+    }
+
+    const form = document.getElementById('signupForm');
+    const pwdInput = document.getElementById('password_signup');
+    const strengthBar = document.getElementById('strengthBar');
+    const strengthMeter = document.querySelector('.password-strength-meter');
+
+    pwdInput?.addEventListener('input', () => {
+        const val = pwdInput.value;
+        if (!val) {
+            strengthMeter.style.display = 'none';
+            return;
+        }
+        strengthMeter.style.display = 'block';
+        
+        let strength = 0;
+        if (val.length > 7) strength++;
+        if (/[A-Z]/.test(val)) strength++;
+        if (/[0-9]/.test(val)) strength++;
+        if (/[^A-Za-z0-9]/.test(val)) strength++;
+
+        strengthBar.className = 'strength-bar';
+        if (strength <= 2) strengthBar.classList.add('strength-weak');
+        else if (strength === 3) strengthBar.classList.add('strength-medium');
+        else strengthBar.classList.add('strength-strong');
+    });
+
+    form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Limpieza de todos los errores previos
+        const errorSpans = form.querySelectorAll('.error-message');
+        errorSpans.forEach(span => {
+            span.textContent = '';
+            span.classList.remove('visible');
+        });
+        const inputs = form.querySelectorAll('input, select');
+        inputs.forEach(input => input.classList.remove('error'));
+
+        function showError(inputId, errorId, message) {
+            const input = document.getElementById(inputId);
+            const errorSpan = document.getElementById(errorId);
+            if(input) input.classList.add('error');
+            if(errorSpan) {
+                errorSpan.textContent = message;
+                errorSpan.classList.add('visible');
+            }
+        }
+
+        const submitBtn = form.querySelector('.signup-btn');
+        const originalText = submitBtn?.textContent ?? '';
+
+        try {
+            const formData = new FormData(form);
+            const community = String(formData.get('community') ?? '').trim();
+            const inviteCode = String(formData.get('inviteCode') ?? '').trim();
+            const fullName = String(formData.get('fullName') ?? '').trim();
+            const email = String(formData.get('email') ?? '').trim();
+            const password = String(formData.get('password') ?? '');
+            const confirmPassword = String(formData.get('confirmPassword') ?? '');
+            const termsAccepted = formData.get('terms') !== null;
+
+            let hasErrors = false;
+
+            // Validaciones Visuales Frontend
+            if (!community) { showError('community', 'communityError', 'La comunidad es obligatoria'); hasErrors = true; }
+            if (!inviteCode) { showError('inviteCode', 'inviteCodeError', 'Código requerido'); hasErrors = true; }
+            if (!fullName) { showError('fullName', 'fullNameError', 'El nombre es obligatorio'); hasErrors = true; }
+            if (!email || !/^\S+@\S+\.\S+$/.test(email)) { showError('email_signup', 'emailSignupError', 'Correo inválido'); hasErrors = true; }
+            if (password.length < 8) { showError('password_signup', 'passwordSignupError', 'Min. 8 caracteres'); hasErrors = true; }
+            if (password !== confirmPassword) { 
+                showError('confirmPassword', 'confirmPasswordError', 'Las contraseñas no coinciden'); 
+                showError('password_signup', 'passwordSignupError', 'Las contraseñas no coinciden'); 
+                hasErrors = true; 
+            }
+            if (!termsAccepted) { 
+                const termsErr = document.getElementById('termsError');
+                if(termsErr) {
+                    termsErr.textContent = 'Debes aceptar los términos';
+                    termsErr.classList.add('visible');
+                }
+                hasErrors = true; 
+            }
+
+            if (hasErrors) return;
+
+            // Indicador de carga
+            if (submitBtn) {
+                submitBtn.textContent = 'Creando cuenta...';
+                submitBtn.disabled = true;
+            }
+
+            const authManager = await getAuthManager();
+            if (!authManager || typeof authManager.register !== 'function') {
+                throw new Error('Servicio de autenticación no disponible');
+            }
+
+            const userData = {
+                community_id: community,      // actualiza key
+                inviteCode,
+                fullName,
+                email,
+                password,
+                terms: true
+            };
+            const result = await authManager.register(userData);
+
+            alert('¡Cuenta creada exitosamente! Por favor, inicia sesión.');
+
+            // Manejo de modales (si existen las funciones)
+            window.closeModal?.('signupModal');
+            window.openModal?.('loginModal');
+
+        } catch (error) {
+            console.error('Error de registro:', error);
+            const generalErr = document.getElementById('signupGeneralError');
+            if(generalErr) {
+                generalErr.textContent = 'Hubo un error al crear la cuenta. ' + (error?.message ?? 'Inténtalo de nuevo.');
+                generalErr.classList.add('visible');
+                generalErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        } finally {
+            if (submitBtn) {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+    });
+
+    // Placeholder para cargar comunidades dinámicamente en el futuro
+    async function loadCommunities() {
+        // TODO: implementar cuando exista el backend
+    }
+    // loadCommunities();
+});
+</script>

@@ -1,0 +1,130 @@
+---
+// LeaderSidebar.astro
+const menuItems = [
+    { icon: 'fas fa-tachometer-alt', label: 'Dashboard', path: '/leader' },
+    { icon: 'fas fa-users-cog', label: 'Mi Comunidad', path: '/leader/community' },
+    { icon: 'fas fa-user-friends', label: 'Miembros', path: '/leader/members' },
+    { icon: 'fas fa-calendar-day', label: 'Eventos', path: '/leader/events' },
+    { icon: 'fas fa-user-circle', label: 'Perfil', path: '/leader/profile' },
+];
+---
+
+<aside class="leader-sidebar glass">
+    <div class="sidebar-logo">
+        <img src="/logo-ctech.png" alt="CTech" />
+        <span>Leader Hub</span>
+    </div>
+
+    <nav class="sidebar-nav">
+        {menuItems.map(item => (
+            <a href={item.path} class="nav-item">
+                <i class={item.icon}></i>
+                <span>{item.label}</span>
+            </a>
+        ))}
+    </nav>
+
+    <div class="sidebar-footer">
+        <button id="logoutBtn" class="nav-item logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Cerrar Sesión</span>
+        </button>
+    </div>
+</aside>
+
+<style>
+    .leader-sidebar {
+        width: 280px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        padding: 2.3rem 1.6rem;
+        z-index: 1000;
+        box-shadow: 10px 0 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .glass {
+        background: rgba(10, 26, 20, 0.9); /* Green tinted dark */
+        backdrop-filter: blur(25px);
+    }
+
+    .sidebar-logo {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        margin-bottom: 3.5rem;
+        padding-left: 0.6rem;
+    }
+
+    .sidebar-logo img { width: 42px; filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.3)); }
+    .sidebar-logo span { 
+        font-weight: 800; 
+        font-size: 1.3rem;
+        background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.01em;
+    }
+
+    .sidebar-nav { flex: 1; }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 1.1rem;
+        padding: 1rem 1.3rem;
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        border-radius: 14px;
+        margin-bottom: 0.7rem;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .nav-item:hover {
+        background: rgba(16, 185, 129, 0.1);
+        color: #6ee7b7;
+        transform: scale(1.02) translateX(4px);
+    }
+
+    .nav-item.active {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.2) 100%);
+        color: white;
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
+    }
+
+    .nav-item i { width: 24px; font-size: 1.2rem; }
+
+    .logout {
+        width: 100%;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        color: #fca5a5 !important;
+        justify-content: flex-start;
+    }
+</style>
+
+<script>
+    import { authManager } from '../../utils/auth';
+
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+        const auth = authManager;
+        auth.logout();
+        window.location.href = '/login';
+    });
+
+    // Mark active link
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-item').forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+    });
+</script>
+

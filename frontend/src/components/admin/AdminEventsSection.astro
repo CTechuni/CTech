@@ -1,0 +1,341 @@
+---
+/* AdminEventsSection.astro */
+---
+
+<div class="admin-events-section">
+    <div class="section-top-header">
+        <div class="header-text">
+            <h2>Gestión de Eventos</h2>
+            <p id="eventsCount">0 eventos programados</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn-add-event" id="addEventBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75z" clip-rule="evenodd" /></svg> Nuevo Evento
+            </button>
+        </div>
+    </div>
+
+    <div class="filter-bar">
+        <div class="search-input-wrap">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 search-icon"><path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5zM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5z" clip-rule="evenodd" /></svg>
+            <input type="text" placeholder="Buscar por título, lugar o comunidad..." id="eventSearch">
+        </div>
+    </div>
+
+    <div class="events-grid-premium" id="eventsGrid">
+        <!-- Render dinámico -->
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <span>Sincronizando calendario de eventos...</span>
+        </div>
+    </div>
+</div>
+
+<!-- Modal simplificado para demostración visual -->
+<div class="modal-backdrop" id="eventModal">
+    <div class="modal-card">
+        <h3>Gestionar Evento</h3>
+        <p>Formulario para crear o actualizar eventos de CTech.</p>
+        <button class="btn-close-modal" id="closeEventModal">Cerrar</button>
+    </div>
+</div>
+
+<style>
+    .admin-events-section {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .section-top-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-text h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #1E293B;
+        margin: 0;
+    }
+
+    .header-text p {
+        font-size: 0.9rem;
+        color: #94A3B8;
+        margin: 0.2rem 0 0 0;
+        font-weight: 500;
+    }
+
+    .btn-add-event {
+        background: #0073ff;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px rgba(0, 115, 255, 0.2);
+    }
+
+    /* SEARCH BAR */
+    .search-bar-container {
+        max-width: 100%;
+    }
+
+    .search-input-wrap {
+        position: relative;
+        max-width: 450px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94A3B8;
+    }
+
+    .search-input-wrap input {
+        width: 100%;
+        padding: 0.85rem 1rem 0.85rem 2.8rem;
+        border-radius: 12px;
+        border: 1px solid #E2E8F0;
+        background: white;
+        font-size: 0.9rem;
+        outline: none;
+    }
+
+    /* GRID */
+    .events-grid-premium {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 1.5rem;
+    }
+
+    /* EVENT CARD */
+    .event-card-premium {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        border: 1px solid #F1F5F9;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s ease;
+    }
+
+    .event-card-premium:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+    }
+
+    .card-img-wrap {
+        height: 160px;
+        background: #F8FAFC;
+        position: relative;
+    }
+
+    .card-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .status-tag {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: white;
+    }
+
+    .status-tag.active { background: #10B981; }
+    .status-tag.draft { background: #F59E0B; }
+
+    .card-body {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .card-title-row h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1E293B;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    .card-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.85rem;
+        color: #64748B;
+        font-weight: 500;
+    }
+
+    .meta-item i {
+        width: 16px;
+        color: #94A3B8;
+        text-align: center;
+    }
+
+    .card-footer-actions {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #F1F5F9;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+    }
+
+    .action-btn-sm {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid #E2E8F0;
+        background: white;
+        color: #94A3B8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .action-btn-sm:hover { color: #0073ff; border-color: #0073ff; }
+
+    /* LOADING SPINNER */
+    .loading-state {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 4rem;
+        color: #94A3B8;
+        gap: 1rem;
+    }
+
+    .spinner {
+        width: 30px;
+        height: 30px;
+        border: 3px solid #F1F5F9;
+        border-top-color: #0073ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* MODAL */
+    .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+    }
+
+    .modal-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 24px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+    }
+</style>
+
+<script>
+    import { authManager } from '../../utils/auth';
+    const auth = authManager;
+
+    let allEvents = [];
+
+    async function fetchData() {
+        try {
+            const data = await auth.get('events');
+            allEvents = data || [];
+            // If empty, add mock for visual
+            if (allEvents.length === 0) {
+                allEvents = [
+                    { title: 'Workshop de Astro & FastAPI', date_events: '2026-03-15', place: 'Zoom / YouTube', status: 'active', image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400' },
+                    { title: 'Meetup DevFront #15', date_events: '2026-03-22', place: 'Sede CTech Bogotá', status: 'active', image: 'https://images.unsplash.com/photo-1540575861501-7ad060e39fe1?auto=format&fit=crop&q=80&w=400' },
+                    { title: 'Hackathon Data Hub 2026', date_events: '2026-04-05', place: 'Remoto', status: 'draft', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=400' }
+                ];
+            }
+            renderEvents(allEvents);
+            updateCount(allEvents.length);
+        } catch (error) {
+            console.error('Error fetching events:', error);
+        }
+    }
+
+    function renderEvents(list) {
+        const grid = document.getElementById('eventsGrid');
+        if (!grid) return;
+
+        grid.innerHTML = list.map(e => `
+            <div class="event-card-premium">
+                <div class="card-img-wrap">
+                    <img src="${e.image || 'https://via.placeholder.com/400x200'}" alt="${e.title}">
+                    <span class="status-tag ${e.status || 'active'}">${e.status || 'Activo'}</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-title-row">
+                        <h3>${e.title}</h3>
+                    </div>
+                    <div class="card-meta">
+                        <div class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3a.75.75 0 0 1 1.5 0v1.5h.75a3 3 0 0 1 3 3v12.75a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3h.75V3a.75.75 0 0 1 .75-.75ZM3.75 7.5V10.5h16.5V7.5a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5ZM20.25 12H3.75v8.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V12Z" clip-rule="evenodd" /></svg>
+                            <span>${e.date_events || 'N/A'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3.75 3.75 0 1 1 0-7.5 3.75 3.75 0 0 1 0 7.5Z" clip-rule="evenodd" /></svg>
+                            <span>${e.place || 'Modalidad Online'}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer-actions">
+                    <button class="action-btn-sm"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.199Z" /></svg></button>
+                    <button class="action-btn-sm"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5 0v8.25a.75.75 0 0 0 1.5 0v-8.25Zm2.25 0a.75.75 0 0 0-1.5 0v8.25a.75.75 0 0 0 1.5 0v-8.25Zm2.25 0a.75.75 0 1 0-1.5 0v8.25a.75.75 0 0 0 1.5 0v-8.25Z" clip-rule="evenodd" /></svg></button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateCount(n) {
+        const el = document.getElementById('eventsCount');
+        if (el) el.textContent = `${n} eventos programados`;
+    }
+
+    document.getElementById('eventSearch')?.addEventListener('input', (e) => {
+        const term = (e.target as HTMLInputElement).value.toLowerCase();
+        renderEvents(allEvents.filter(ev => 
+            ev.title.toLowerCase().includes(term) || 
+            (ev.place || '').toLowerCase().includes(term)
+        ));
+    });
+
+    fetchData();
+</script>
+

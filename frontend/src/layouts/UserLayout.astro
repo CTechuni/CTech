@@ -1,0 +1,85 @@
+---
+// UserLayout.astro
+import UserHeader from '../components/user/UserHeader.astro';
+import UserSidebar from '../components/user/UserSidebar.astro';
+
+interface Props {
+    title: string;
+    subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | CTech App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body class="user-body">
+    <div class="user-container">
+        <UserSidebar />
+        <main class="user-main">
+            <UserHeader title={title} subtitle={subtitle} />
+            <div class="user-content">
+                <slot />
+            </div>
+        </main>
+    </div>
+
+    <style is:global>
+        :root {
+            --user-primary: #f59e0b;
+            --user-secondary: #d97706;
+            --bg-dark: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body.user-body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(217, 119, 6, 0.05) 0px, transparent 50%);
+            margin: 0;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .user-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .user-main {
+            flex: 1;
+            margin-left: 280px;
+            padding: 3rem 4.5rem;
+            position: relative;
+        }
+
+        .user-content {
+            margin-top: 1.5rem;
+            animation: bounceIn 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        @keyframes bounceIn {
+            from { opacity: 0; transform: scale(0.98) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .user-main { margin-left: 0; padding: 2rem; }
+            .user-sidebar { transform: translateX(-100%); transition: transform 0.4s ease; }
+            .user-sidebar.open { transform: translateX(0); }
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,85 @@
+---
+// MentorLayout.astro
+import MentorSidebar from '../components/mentor/MentorSidebar.astro';
+import MentorHeader from '../components/mentor/MentorHeader.astro';
+
+interface Props {
+    title: string;
+    subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | Mentor Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body class="mentor-body">
+    <div class="mentor-container">
+        <MentorSidebar />
+        <main class="mentor-main">
+            <MentorHeader title={title} subtitle={subtitle} />
+            <div class="mentor-content">
+                <slot />
+            </div>
+        </main>
+    </div>
+
+    <style is:global>
+        :root {
+            --mentor-primary: #8b5cf6;
+            --mentor-secondary: #7c3aed;
+            --bg-dark: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body.mentor-body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.05) 0px, transparent 50%);
+            margin: 0;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .mentor-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .mentor-main {
+            flex: 1;
+            margin-left: 280px; /* Sidebar width */
+            padding: 2.5rem 3rem;
+            position: relative;
+        }
+
+        .mentor-content {
+            margin-top: 1rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .mentor-main { margin-left: 0; padding: 1.5rem; }
+            .mentor-sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+            .mentor-sidebar.open { transform: translateX(0); }
+        }
+    </style>
+</body>
+</html>
