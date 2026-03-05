@@ -60,7 +60,7 @@ Seguridad Mejorada:        ~85%
     - Expandido de 150 a 255 caracteres
 
 12. ✅ **Sin Auditoría en Usuarios**
-    - Agregados timestamps, is_email_verified
+    - Agregados DateTimes, is_email_verified
 
 13. ✅ **Sin File Upload Validation**
     - Whitelist de tipos MIME
@@ -246,7 +246,7 @@ Sin validación de autorización  → Autorización validada
 Tokens sin expiración           → Tokens con exp configurable
 Sin error handling              → Global exception handler
 password_hash 150 chars         → password_hash 255 chars
-Sin auditoría                   → Timestamps de auditoría
+Sin auditoría                   → DateTimes de auditoría
 Seed data cada startup          → Seed data una sola vez
 ```
 

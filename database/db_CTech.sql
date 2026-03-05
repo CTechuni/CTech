@@ -80,7 +80,7 @@ CREATE TABLE public.educational_content (
     area_id integer,
     level_id integer,
     author_id integer,
-    upload_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    upload_date DateTime without time zone DEFAULT CURRENT_DateTime,
     status_content character varying(50)
 );
 
@@ -121,7 +121,7 @@ CREATE TABLE public.event_registrations (
     id_event_registration integer NOT NULL,
     id_user integer,
     id_event integer,
-    date_registration timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+    date_registration DateTime without time zone DEFAULT CURRENT_DateTime
 );
 
 
@@ -207,8 +207,8 @@ CREATE TABLE public.invitation_codes (
     id_code integer NOT NULL,
     code character varying(150) NOT NULL,
     community_id integer,
-    creation_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    expiration_date timestamp without time zone
+    creation_date DateTime without time zone DEFAULT CURRENT_DateTime,
+    expiration_date DateTime without time zone
 );
 
 
@@ -287,7 +287,7 @@ CREATE TABLE public.mentorship_registrations (
     id_registration integer NOT NULL,
     id_user integer,
     id_mentorship integer,
-    date_registration timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    date_registration DateTime without time zone DEFAULT CURRENT_DateTime,
     status character varying(50) NOT NULL
 );
 
@@ -328,7 +328,7 @@ CREATE TABLE public.mentorships (
     id_mentorship integer NOT NULL,
     title character varying(255) NOT NULL,
     description_mentorship text,
-    date_mentorship timestamp without time zone,
+    date_mentorship DateTime without time zone,
     hour_mentorship time without time zone,
     form_link character varying(255) NOT NULL,
     minimum_quota integer,
@@ -538,7 +538,7 @@ CREATE TABLE public.users (
     rol_id integer,
     community_id integer,
     profile_id integer,
-    registration_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    registration_date DateTime without time zone DEFAULT CURRENT_DateTime,
     status character varying(50) DEFAULT 'active'::character varying
 );
 
@@ -1202,7 +1202,7 @@ WHERE rol_id = 4; -- 4 es el ID de admin seg£n COPY public.roles
 CREATE TABLE public.token_blocklist (
     id SERIAL PRIMARY KEY,
     token TEXT NOT NULL UNIQUE,
-    blacklisted_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    blacklisted_at DateTime WITHOUT TIME ZONE DEFAULT CURRENT_DateTime
 );
 
 -- 2. Tabla para tokens de recuperación de contraseña
@@ -1210,9 +1210,9 @@ CREATE TABLE public.password_reset_tokens (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     token VARCHAR(255) NOT NULL UNIQUE,
-    expires_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    expires_at DateTime WITHOUT TIME ZONE NOT NULL,
     used BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at DateTime WITHOUT TIME ZONE DEFAULT CURRENT_DateTime
 );
 
 -- Completed on 2026-02-10 10:35:51

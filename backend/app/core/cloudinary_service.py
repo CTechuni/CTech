@@ -12,14 +12,8 @@ cloudinary.config(
 )
 
 def upload_image(file, folder: str = "general"):
-    """
-    Sube una imagen aCloudinary en la carpeta especificada.
-    """
     try:
-        upload_result = cloudinary.uploader.upload(
-            file, 
-            folder = f"ctech/{folder}"
-        )
+        upload_result = cloudinary.uploader.upload(file, folder=f"ctech/{folder}")
         return upload_result.get("secure_url")
     except Exception as e:
         print(f"Error uploading to Cloudinary: {e}")

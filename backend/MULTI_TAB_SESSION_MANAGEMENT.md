@@ -125,12 +125,12 @@ class User(Base):
     
     # 🆕 Session management
     last_valid_token = Column(String(500), nullable=True)
-    last_token_issued_at = Column(TIMESTAMP, nullable=True)
+    last_token_issued_at = Column(DateTime, nullable=True)
 ```
 
 **Propósito**: 
 - `last_valid_token` = Token más reciente del usuario
-- `last_token_issued_at` = Timestamp de cuando se emitió
+- `last_token_issued_at` = DateTime de cuando se emitió
 
 #### 2. **Auth: Guardar Token en Login**
 **Archivo**: `app/modules/auth/router.py` - Endpoint `/login`

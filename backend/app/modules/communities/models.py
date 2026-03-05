@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Timestamp, func
+from sqlalchemy import Column, Integer, String, Text, DateTime, func
 from app.core.database import Base
 
 class Community(Base):
@@ -11,5 +11,5 @@ class Community(Base):
     code = Column(String(50), nullable=False, unique=True)
     access_code = Column(String(50), unique=True)
     logo_url = Column(String(255))
-    created_at = Column(Timestamp, server_default=func.now())
+    created_at = Column(DateTime, server_default=func.now())
     

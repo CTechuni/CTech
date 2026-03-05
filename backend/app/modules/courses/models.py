@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, JSON, Timestamp, func
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, JSON, DateTime, func
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 
@@ -15,7 +15,7 @@ class Course(Base):
     mentor_id = Column(Integer, ForeignKey("users.id"))
     community_id = Column(Integer, ForeignKey("communities.id_community"))
     specialty_id = Column(Integer, ForeignKey("specialties.id"))
-    created_at = Column(Timestamp, server_default=func.now())
+    created_at = Column(DateTime, server_default=func.now())
 
     # Relaciones para consultas potentes
     community = relationship("Community")

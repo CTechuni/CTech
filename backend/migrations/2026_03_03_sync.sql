@@ -4,7 +4,7 @@
 
 -- Add columns if they don't already exist (PostgreSQL syntax)
 ALTER TABLE users
-    ADD COLUMN IF NOT EXISTS last_login TIMESTAMP NULL;
+    ADD COLUMN IF NOT EXISTS last_login DateTime NULL;
 
 -- new in models: email verification flag
 ALTER TABLE users
@@ -14,7 +14,7 @@ ALTER TABLE users
 ALTER TABLE users
     ADD COLUMN IF NOT EXISTS last_valid_token VARCHAR(500) NULL;
 ALTER TABLE users
-    ADD COLUMN IF NOT EXISTS last_token_issued_at TIMESTAMP NULL;
+    ADD COLUMN IF NOT EXISTS last_token_issued_at DateTime NULL;
 
 -- Ensure roles table contains all expected names (admin, leader, mentor, user)
 INSERT INTO roles (name_rol, description)

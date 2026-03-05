@@ -44,7 +44,7 @@
 ```sql
 -- migrations/add_session_fields.sql
 ALTER TABLE users ADD COLUMN last_valid_token VARCHAR(500);
-ALTER TABLE users ADD COLUMN last_token_issued_at TIMESTAMP;
+ALTER TABLE users ADD COLUMN last_token_issued_at DateTime;
 ```
 
 **Code Changes**:

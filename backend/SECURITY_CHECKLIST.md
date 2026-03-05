@@ -47,7 +47,7 @@
 ### 7. **Database**
 - [x] Pool de conexiones configurado para serverless
 - [x] Connection timeout configurado
-- [x] Agregados timestamps de auditoría (registration_date, last_login)
+- [x] Agregados DateTimes de auditoría (registration_date, last_login)
 - [x] Agregado campo `is_email_verified` para verificación de email
 - [x] Seed data solo se ejecuta UNA VEZ (no en cada startup)
 
@@ -174,7 +174,7 @@ ALLOWED_ORIGINS=https://yourdomain.com
 
 ### 8. users/models.py
 - ✅ password_hash expandido a 255 chars
-- ✅ Timestamps de auditoría
+- ✅ DateTimes de auditoría
 - ✅ is_email_verified field
 - ✅ Status field indexado
 

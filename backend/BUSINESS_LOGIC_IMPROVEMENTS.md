@@ -255,8 +255,8 @@ password_hash = Column(String(255), nullable=False)  # Bcrypt = 60 chars mínimo
 #### ✅ MEJORADO: Falta campos de auditoría
 **Añadido en User model:**
 ```python
-registration_date = Column(TIMESTAMP, default=datetime.utcnow)
-last_login = Column(TIMESTAMP, nullable=True)
+registration_date = Column(DateTime, default=datetime.utcnow)
+last_login = Column(DateTime, nullable=True)
 is_email_verified = Column(Boolean, default=False)
 status = Column(String(50), default="active", index=True)  # active, inactive, suspended
 ```
@@ -345,7 +345,7 @@ class AuditLog(Base):
     resource_id = Column(Integer)
     old_values = Column(JSON)
     new_values = Column(JSON)
-    timestamp = Column(TIMESTAMP, default=datetime.utcnow)
+    DateTime = Column(DateTime, default=datetime.utcnow)
     ip_address = Column(String)
 ```
 
@@ -354,7 +354,7 @@ class AuditLog(Base):
 # En lugar de borrar, marcar como deleted
 class User(Base):
     # ...
-    deleted_at = Column(TIMESTAMP, nullable=True)
+    deleted_at = Column(DateTime, nullable=True)
     
     # Query solo usuarios activos por defecto
     @staticmethod

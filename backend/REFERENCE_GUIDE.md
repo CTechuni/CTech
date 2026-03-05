@@ -194,7 +194,7 @@ Este documento mapea cada problema encontrado y su ubicación en el código.
 | Sin registration_date | `users/models.py:46` | Agregado con default |
 | Sin last_login | `users/models.py:47` | Agregado |
 | Sin email_verified | `users/models.py:48` | Agregado |
-| Sin timestamp actualización | `users/models.py:46-48` | Agregado DEFAULT |
+| Sin DateTime actualización | `users/models.py:46-48` | Agregado DEFAULT |
 
 **Archivos modificados:**
 - ✅ `app/modules/users/models.py` - Auditoría fields agregados

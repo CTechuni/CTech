@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.core.database import engine, SessionLocal
+from app.db.base_api import Base  # Importante: Base desde base_api para cargar todos los modelos
+from app.db.init_db import seed_data # Para crear los roles y el admin automáticamente
 
 # Importación de Routers
 from app.modules.auth.router import router as auth_router
@@ -14,25 +17,35 @@ from app.modules.specialties.router import router as specialties_router
 from app.modules.technologies.router import router as technologies_router
 from app.modules.admin.router import router as admin_router
 
+# 1. Crear las tablas en PostgreSQL (basado en base_api.py)
+Base.metadata.create_all(bind=engine)
+
+# 2. Ejecutar el sembrado de datos iniciales
+db = SessionLocal()
+try:
+    seed_data(db)
+finally:
+    db.close()
+
 app = FastAPI(
     title="CTech API",
     description="Plataforma LMS para comunidades tecnológicas en Colombia",
     version="1.0.0"
 )
 
-# Configuración de CORS (Vital para que el Frontend se conecte)
+# Configuración de CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En producción cambia esto por tu dominio
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Registro de Rutas con prefijo de versión v1
 api_prefix = "/api/v1"
 
-app.include_router(auth_router, prefix=api_prefix)
+# Registro de Rutas
+app.include_router(auth_router, prefix=f"{api_prefix}/auth", tags=["Auth"])
 app.include_router(users_router, prefix=api_prefix)
 app.include_router(communities_router, prefix=api_prefix)
 app.include_router(content_router, prefix=api_prefix)

@@ -150,7 +150,7 @@ Use este checklist para verificar que todos los cambios están en lugar y funcio
 - [ ] `logger.py` existe y funciona
 - [ ] `logs/app.log` se crea
 - [ ] Logs rotan por tamaño
-- [ ] Logs incluyen timestamp
+- [ ] Logs incluyen DateTime
 
 ### Niveles
 - [ ] `DEBUG` nivel en desarrollo
