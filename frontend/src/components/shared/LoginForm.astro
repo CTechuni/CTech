@@ -175,7 +175,7 @@
 </style>
 
 <script type="module">
-    import { authManager } from '../../utils/auth.js';
+    import { AuthManager, authManager } from "../../utils/auth.js";
 
     // Cerrar modal (complemento de openModal)
     function closeModal(modalId) {
@@ -254,37 +254,53 @@
                 submitBtn.disabled = true;
             }
 
+            console.log("Intentando login para:", email);
             try {
-                const result = await authManager.login(email, password, false);
+                const result = await authManager.login(email, password);
 
                 console.debug('login result', result);
 
-                // Update UI first
-                updateAuthUI(result.user);
-                
-                // REDIRECTION LOGIC (Strictly based on role)
+                // REDIRECCIÓN (Estricta según rol e ID)
                 const role = String(result.user?.role || '').toLowerCase().trim();
+                const userId = result.user?.id;
+                
                 if (!role) {
-                    // if the server didn't include a role, cart and surface
                     throw new Error('No se pudo determinar el rol en la respuesta del servidor');
                 }
-                let redirectPath = '/user'; // Default
+                
+                let redirectPath = '/user/dashboard'; // Por defecto
                 
                 if (role === 'admin') {
-                    redirectPath = '/admin';
-                } else if (role === 'mentor') {
-                    redirectPath = '/mentor';
-                } else if (role === 'leader' || role === 'lider') {
-                    redirectPath = '/leader';
+                    redirectPath = '/admin/dashboard';
+                } else {
+                    // Para user, mentor, leader
+                    redirectPath = `/${role}/dashboard?id=${userId}`;
                 }
                 
-                // Close modal and redirect
-                closeModal('loginModal');
-                window.location.href = redirectPath;
+                authManager.setAuthData(result.access_token, result.user);
+                
+                // EMERGENCY BYPASS: Force redirection using standard browser APIs
+                console.log("EMERGENCY: Login success, forcing redirection to:", role);
+                localStorage.setItem('last_login_role', role);
+                localStorage.setItem('last_login_id', userId);
+                
+                window.location.assign(redirectPath);
+                
+                // Fallback if assign fails
+                setTimeout(() => {
+                    window.location.href = redirectPath;
+                }, 500);
 
             } catch (error) {
                 console.error('login failed', error);
-                passwordError.textContent = error.message || 'Credenciales incorrectas';
+                const msg = error.message || 'Error al iniciar sesión';
+                if (msg.toLowerCase().includes('correo') || msg.toLowerCase().includes('registrado')) {
+                    emailError.textContent = msg;
+                    emailError.classList.add('visible');
+                    emailInput.classList.add('error');
+                } else {
+                    passwordError.textContent = msg;
+                }
                 passwordError.classList.add('visible');
             } finally {
                 if (submitBtn) {

@@ -140,7 +140,8 @@ const { title, subtitle } = Astro.props;
 </style>
 
 <script>
-    import { authManager } from '../../utils/auth.js';
+    /* ⚠️ BYPASS TEMPORAL - SOLO SIMULACRO VISUAL. Reactivar antes de producción.
+    import { AuthManager, authManager } from "../../utils/auth.js";
     const auth = authManager;
     const user = auth.getUser();
     if (user) {
@@ -155,5 +156,7 @@ const { title, subtitle } = Astro.props;
             avatarContainer.innerHTML = `<img src="${photoUrl}" alt="Avatar" class="avatar-img" />`;
         }
     }
+    */
+    console.info('[BYPASS VISUAL] AdminHeader: usando datos estáticos Carlos Ramírez.');
 </script>
 

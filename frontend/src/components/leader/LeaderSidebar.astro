@@ -9,10 +9,18 @@ const menuItems = [
 ];
 ---
 
-<aside class="leader-sidebar glass">
+<aside class="leader-sidebar">
     <div class="sidebar-logo">
         <img src="/logo-ctech.png" alt="CTech" />
         <span>Leader Hub</span>
+    </div>
+
+    <div class="profile-card">
+        <div class="avatar-circle">LM</div>
+        <div class="profile-info">
+            <span class="profile-name">Laura Méndez</span>
+            <span class="profile-badge">Líder</span>
+        </div>
     </div>
 
     <nav class="sidebar-nav">
@@ -34,40 +42,80 @@ const menuItems = [
 
 <style>
     .leader-sidebar {
-        width: 280px;
+        width: 260px;
         height: 100vh;
         position: fixed;
         left: 0;
         top: 0;
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        background-color: var(--color-primary-dark);
         display: flex;
         flex-direction: column;
-        padding: 2.3rem 1.6rem;
+        padding: 2rem 1.2rem;
         z-index: 1000;
-        box-shadow: 10px 0 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .glass {
-        background: rgba(10, 26, 20, 0.9); /* Green tinted dark */
-        backdrop-filter: blur(25px);
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
     }
 
     .sidebar-logo {
         display: flex;
         align-items: center;
-        gap: 1.2rem;
-        margin-bottom: 3.5rem;
-        padding-left: 0.6rem;
+        gap: 0.8rem;
+        margin-bottom: 2.5rem;
+        padding-left: 0.5rem;
     }
 
-    .sidebar-logo img { width: 42px; filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.3)); }
+    .sidebar-logo img { width: 32px; }
     .sidebar-logo span { 
-        font-weight: 800; 
-        font-size: 1.3rem;
-        background: linear-gradient(135deg, #34d399 0%, #059669 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        letter-spacing: -0.01em;
+        font-weight: 700; 
+        font-size: 1.1rem;
+        color: white;
+    }
+
+    /* Profile Card Implementation */
+    .profile-card {
+        background-color: var(--color-primary);
+        border-radius: 12px;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .avatar-circle {
+        width: 40px;
+        height: 40px;
+        background-color: #E0F2FE; /* Light blue */
+        color: var(--color-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    .profile-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .profile-name {
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    .profile-badge {
+        background-color: var(--color-azure-radiant);
+        color: white;
+        font-size: 0.7rem;
+        padding: 0.1rem 0.5rem;
+        border-radius: 4px;
+        font-weight: 700;
+        width: fit-content;
     }
 
     .sidebar-nav { flex: 1; }
@@ -75,54 +123,76 @@ const menuItems = [
     .nav-item {
         display: flex;
         align-items: center;
-        gap: 1.1rem;
-        padding: 1rem 1.3rem;
-        color: rgba(255, 255, 255, 0.55);
+        gap: 0.8rem;
+        padding: 0.8rem 1rem;
+        color: var(--color-blue-grey);
         text-decoration: none;
-        border-radius: 14px;
-        margin-bottom: 0.7rem;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        font-size: 0.95rem;
     }
 
     .nav-item:hover {
-        background: rgba(16, 185, 129, 0.1);
-        color: #6ee7b7;
-        transform: scale(1.02) translateX(4px);
+        color: white;
+        background: rgba(255, 255, 255, 0.05);
     }
 
     .nav-item.active {
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.2) 100%);
+        background-color: var(--color-azure-radiant);
         color: white;
-        border: 1px solid rgba(16, 185, 129, 0.35);
-        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
     }
 
-    .nav-item i { width: 24px; font-size: 1.2rem; }
+    .nav-item i { width: 20px; text-align: center; }
 
     .logout {
         width: 100%;
         background: transparent;
         border: none;
         cursor: pointer;
-        font-size: 1rem;
-        color: #fca5a5 !important;
+        color: var(--color-blue-grey) !important;
         justify-content: flex-start;
+    }
+    
+    .logout:hover {
+        color: #ef4444 !important;
+        background: rgba(239, 68, 68, 0.1);
     }
 </style>
 
 <script>
-    import { authManager } from '../../utils/auth';
+    /* ⚠️ BYPASS TEMPORAL - SOLO SIMULACRO VISUAL. Reactivar antes de producción.
+    import { AuthManager, authManager } from "../../utils/auth.js";
 
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
         const auth = authManager;
         auth.logout();
         window.location.href = '/login';
     });
+    */
 
-    // Mark active link
+    // Logout estático para simulacro
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+        console.info('[BYPASS VISUAL] Logout deshabilitado durante simulacro.');
+        window.location.href = '/';
+    });
+
+    // Mark active link and persist ID
     const currentPath = window.location.pathname;
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id');
+
     document.querySelectorAll('.nav-item').forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
+        // Persistir ID en los enlaces si existe
+        if (userId && link.tagName === 'A') {
+            const href = link.getAttribute('href');
+            if (href && !href.startsWith('http') && !href.includes('id=')) {
+                link.setAttribute('href', `${href}${href.includes('?') ? '&' : '?'}id=${userId}`);
+            }
+        }
+
+        if (link.getAttribute('href')?.split('?')[0] === currentPath) {
             link.classList.add('active');
         }
     });

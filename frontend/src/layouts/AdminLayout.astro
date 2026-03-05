@@ -2,6 +2,7 @@
 // AdminLayout.astro
 import AdminSidebar from '../components/admin/AdminSidebar.astro';
 import AdminHeader from '../components/admin/AdminHeader.astro';
+import '../styles/globals.css';
 
 interface Props {
     title: string;
@@ -17,8 +18,20 @@ const { title, subtitle } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} | CTech Admin</title>
-    <link rel="stylesheet" href="/src/styles/globals.css" />
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js" is:inline></script>
+
+    <!-- ⚠️ BYPASS TEMPORAL - SOLO PARA SIMULACRO VISUAL. Reactivar antes de producción.
+    <script is:inline>
+        (function() {
+            const token = localStorage.getItem('token_admin_001');
+            if (!token) {
+                console.warn('Acceso denegado: No se encontró token de admin. Redirigiendo...');
+                window.location.href = '/login';
+            }
+        })();
+    </script>
+    -->
 </head>
 <body class="admin-body">
     <div class="admin-container">

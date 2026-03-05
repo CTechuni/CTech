@@ -5,12 +5,14 @@ from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from app.core.database import get_db
+from app.core.config import get_settings
 from . import models, repository
 
 # Configuración de seguridad
+settings = get_settings()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-SECRET_KEY = "CTECH_SECRET_KEY_2026" 
-ALGORITHM = "HS256"
+SECRET_KEY = settings.JWT_SECRET_KEY
+ALGORITHM = settings.ALGORITHM
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
 
 # --- Funciones de Contraseña ---

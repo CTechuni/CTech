@@ -11,21 +11,14 @@ const { title, subtitle } = Astro.props;
 <header class="leader-header">
     <div class="header-info">
         <h1>{title}</h1>
-        {subtitle && <p class="subtitle">{subtitle}</p>}
     </div>
 
     <div class="header-actions">
-        <div class="community-badge">
-            <i class="fas fa-shield-alt"></i>
-            <span id="communityName">Mi Comunidad</span>
+        <div class="notification-box">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">3</span>
         </div>
-        <div class="user-profile">
-            <div class="user-info">
-                <span id="userName">Líder Name</span>
-                <span class="role-tag">Líder de Comunidad</span>
-            </div>
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=leader" alt="avatar" />
-        </div>
+        <div class="user-avatar-mini">LM</div>
     </div>
 </header>
 
@@ -34,81 +27,62 @@ const { title, subtitle } = Astro.props;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2.5rem;
-        padding: 1rem 0;
+        background-color: white;
+        padding: 1rem 2rem;
+        margin: -2rem -3rem 2rem -3rem; /* Offset the main padding */
+        border-bottom: 1px solid var(--color-light-grey);
     }
 
     .header-info h1 {
-        font-size: 2.3rem;
-        font-weight: 800;
+        font-size: 1.25rem;
+        font-weight: 700;
         margin: 0;
-        background: linear-gradient(135deg, #fff 0%, #34d399 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        letter-spacing: -0.03em;
-    }
-
-    .subtitle {
-        color: rgba(255, 255, 255, 0.45);
-        margin: 0.4rem 0 0;
-        font-size: 1.05rem;
-        font-weight: 400;
+        color: var(--color-primary-dark);
     }
 
     .header-actions {
         display: flex;
         align-items: center;
-        gap: 2.5rem;
+        gap: 1.5rem;
     }
 
-    .community-badge {
+    .notification-box {
+        position: relative;
+        font-size: 1.2rem;
+        color: var(--color-blue-grey);
+        cursor: pointer;
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: var(--color-azure-radiant);
+        color: white;
+        font-size: 0.65rem;
+        padding: 0.1rem 0.35rem;
+        border-radius: 50%;
+        font-weight: 700;
+        border: 2px solid white;
+    }
+
+    .user-avatar-mini {
+        width: 35px;
+        height: 35px;
+        background-color: var(--color-primary);
+        color: white;
+        border-radius: 50%;
         display: flex;
         align-items: center;
-        gap: 0.8rem;
-        color: #34d399;
+        justify-content: center;
         font-weight: 600;
-        background: rgba(52, 211, 153, 0.1);
-        padding: 0.5rem 1rem;
-        border-radius: 12px;
-        border: 1px solid rgba(52, 211, 153, 0.2);
-    }
-
-    .user-profile {
-        display: flex;
-        align-items: center;
-        gap: 1.1rem;
-        background: rgba(255, 255, 255, 0.04);
-        padding: 0.7rem 1.3rem;
-        border-radius: 18px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        transition: all 0.4s ease;
-    }
-
-    .user-profile:hover {
-        background: rgba(255, 255, 255, 0.07);
-        border-color: rgba(52, 211, 153, 0.4);
-        transform: translateY(-2px);
-    }
-
-    .user-info {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-
-    .user-info #userName { font-weight: 700; font-size: 1rem; color: white; }
-    .role-tag { font-size: 0.7rem; color: #34d399; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; }
-
-    .user-profile img {
-        width: 44px;
-        height: 44px;
-        border-radius: 14px;
-        border: 2px solid rgba(52, 211, 153, 0.2);
+        font-size: 0.8rem;
     }
 </style>
 
 <script>
-    import { authManager } from '../../utils/auth';
+    /* ⚠️ BYPASS TEMPORAL - SOLO SIMULACRO VISUAL. Reactivar antes de producción.
+    import { AuthManager, authManager } from "../../utils/auth.js";
     const auth = authManager;
     const user = auth.getUser();
     if (user) {
@@ -118,5 +92,8 @@ const { title, subtitle } = Astro.props;
             document.getElementById('communityName').textContent = user.community_name;
         }
     }
+    */
+    // Datos estáticos temporales para simulacro visual
+    console.info('[BYPASS VISUAL] LeaderHeader: usando datos estáticos de Laura Méndez.');
 </script>
 

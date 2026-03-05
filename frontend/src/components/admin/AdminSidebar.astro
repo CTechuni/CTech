@@ -257,7 +257,8 @@ const menuItems = [
 </style>
 
 <script>
-    import { authManager } from '../../utils/auth.js';
+    /* ⚠️ BYPASS TEMPORAL - SOLO SIMULACRO VISUAL. Reactivar antes de producción.
+    import { AuthManager, authManager } from "../../utils/auth.js";
     const auth = authManager;
 
     // Fill user info
@@ -275,6 +276,16 @@ const menuItems = [
 
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
         auth.logout();
+        window.location.href = '/';
+    });
+    */
+
+    // Datos estáticos durante simulacro
+    console.info('[BYPASS VISUAL] AdminSidebar: usando datos estáticos Carlos Ramírez.');
+
+    // Logout estático para simulacro
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+        console.info('[BYPASS VISUAL] Logout deshabilitado durante simulacro.');
         window.location.href = '/';
     });
 

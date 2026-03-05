@@ -7,10 +7,6 @@ from . import schemas, service
 router = APIRouter(prefix="/users", tags=["Users"])
 
 # Público
-@router.post("/register", response_model=schemas.UserResponse)
-def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    return service.create_user(db, user)
-
 # Protegido
 @router.get("/", response_model=list[schemas.UserResponse])
 def list_users(db: Session = Depends(get_db), current=Depends(get_current_user)):

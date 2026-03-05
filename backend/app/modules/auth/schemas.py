@@ -20,9 +20,16 @@ class LoginRequest(BaseModel):
     email: EmailStr
     password: str
 
+class UserInfo(BaseModel):
+    id: int
+    email: str
+    role: str
+    name: str
+
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
+    user: UserInfo
 
 class TokenData(BaseModel):
     email: Optional[str] = None
@@ -39,12 +46,14 @@ class ResetPasswordRequest(BaseModel):
     def check_password(cls, v):
         return validate_password_complexity(v)
 
-# Esquema para registro (basado en tu modelo User)
+# Esquema para registro (basado en el modelo User)
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
-    name_user: Optional[str] = None
-    rol_id: int = 2 # Por defecto estudiante
+    name_user: str = Field(..., min_length=10, max_length=65) # Nombre completo
+    community_id: int
+    invite_code: str
+    rol_id: Optional[int] = 4 # Por defecto User (estudiante)
 
     @field_validator('password')
     @classmethod

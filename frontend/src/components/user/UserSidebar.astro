@@ -110,17 +110,37 @@ const menuItems = [
 </style>
 
 <script>
-    import { authManager } from '../../utils/auth';
+    /* ⚠️ BYPASS TEMPORAL - SOLO SIMULACRO VISUAL. Reactivar antes de producción.
+    import { AuthManager, authManager } from "../../utils/auth.js";
 
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
         const auth = authManager;
         auth.logout();
         window.location.href = '/login';
     });
+    */
+
+    // Logout estático para simulacro
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+        console.info('[BYPASS VISUAL] Logout deshabilitado durante simulacro.');
+        window.location.href = '/';
+    });
 
     const currentPath = window.location.pathname;
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id');
+
     document.querySelectorAll('.nav-item').forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
+        // Persistir ID en los enlaces si existe
+        if (userId && link.tagName === 'A') {
+            const href = link.getAttribute('href');
+            if (href && !href.startsWith('http') && !href.includes('id=')) {
+                link.setAttribute('href', `${href}${href.includes('?') ? '&' : '?'}id=${userId}`);
+            }
+        }
+
+        // Marcar activo
+        if (link.getAttribute('href')?.split('?')[0] === currentPath) {
             link.classList.add('active');
         }
     });

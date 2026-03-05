@@ -157,6 +157,7 @@ import MentorLayout from '../../layouts/MentorLayout.astro';
     </style>
 
     <script>
+        /* ⚠️ BYPASS TEMPORAL - SOLO SIMULACRO VISUAL. Reactivar antes de producción.
         import { authManager, requireRole } from '../../utils/auth.js';
         
         // Proteger la vista
@@ -166,6 +167,8 @@ import MentorLayout from '../../layouts/MentorLayout.astro';
 
         const auth = authManager;
         const user = auth.getUser();
+        */
+        console.info('[BYPASS VISUAL] mentor/index.astro: guard de auth deshabilitado temporalmente.');
     </script>
 </MentorLayout>
 

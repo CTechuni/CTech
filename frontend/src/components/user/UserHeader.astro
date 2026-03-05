@@ -125,11 +125,14 @@ const { title, subtitle } = Astro.props;
 </style>
 
 <script>
-    import { authManager } from '../../utils/auth';
+    /* ⚠️ BYPASS TEMPORAL - SOLO SIMULACRO VISUAL. Reactivar antes de producción.
+    import { AuthManager, authManager } from "../../utils/auth.js";
     const auth = authManager;
     const user = auth.getUser();
     if (user) {
         document.getElementById('userName').textContent = user.name_user || user.name;
     }
+    */
+    console.info('[BYPASS VISUAL] UserHeader: usando datos estáticos User Name.');
 </script>
 

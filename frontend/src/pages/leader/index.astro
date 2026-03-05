@@ -3,73 +3,138 @@
 import LeaderLayout from '../../layouts/LeaderLayout.astro';
 ---
 
-<LeaderLayout title="Panel de Líder" subtitle="Gestiona y haz crecer tu comunidad tecnológica.">
+<LeaderLayout title="Dashboard de Líder">
+    <!-- Summary Cards -->
     <div class="dashboard-grid">
-        <div class="stat-card glass-morphic">
-            <div class="icon-box emerald"><i class="fas fa-users"></i></div>
-            <div class="stat-info">
-                <h3>1,240</h3>
-                <p>Miembros en Comunidad</p>
+        <div class="glass-card stat-card">
+            <div class="stat-icon-wrapper pastel-blue">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">4</span>
+                <p class="stat-label">Comunidades</p>
             </div>
         </div>
-        <div class="stat-card glass-morphic">
-            <div class="icon-box mint"><i class="fas fa-calendar-check"></i></div>
-            <div class="stat-info">
-                <h3>8</h3>
-                <p>Eventos este Mes</p>
+        <div class="glass-card stat-card">
+            <div class="stat-icon-wrapper pastel-green">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">2</span>
+                <p class="stat-label">Eventos Activos</p>
             </div>
         </div>
-        <div class="stat-card glass-morphic">
-            <div class="icon-box teal"><i class="fas fa-chart-line"></i></div>
-            <div class="stat-info">
-                <h3>24%</h3>
-                <p>Crecimiento Mensual</p>
+        <div class="glass-card stat-card">
+            <div class="stat-icon-wrapper pastel-purple">
+                <i class="fas fa-graduation-cap"></i>
             </div>
-        </div>
-        <div class="stat-card glass-morphic">
-            <div class="icon-box lime"><i class="fas fa-medal"></i></div>
-            <div class="stat-info">
-                <h3>#3</h3>
-                <p>Ranking Global</p>
+            <div class="stat-content">
+                <span class="stat-value">1</span>
+                <p class="stat-label">Curso Nuevo</p>
             </div>
         </div>
     </div>
 
-    <div class="community-overview">
-        <div class="activity-feed glass-morphic">
-            <div class="section-header">
-                <h2>Actividad de la Comunidad</h2>
-                <button class="icon-btn"><i class="fas fa-ellipsis-h"></i></button>
+    <!-- Main Content Area -->
+    <div class="main-dashboard-content">
+        <!-- Growth Chart Mockup -->
+        <div class="glass-card chart-container">
+            <div class="chart-header">
+                <h3>Crecimiento de Miembros</h3>
+                <span class="growth-badge">+49%</span>
             </div>
-            <div class="feed-items">
-                <div class="feed-item">
-                    <div class="user-avatar-small">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user1" alt="avatar" />
+            <div class="chart-mock">
+                <!-- SVG Trend Line Mockup -->
+                <svg viewBox="0 0 400 100" class="trend-line">
+                    <path d="M0,80 Q50,70 100,50 T200,60 T300,30 T400,10" fill="none" stroke="var(--color-primary)" stroke-width="3" />
+                    <circle cx="100" cy="50" r="4" fill="var(--color-primary)" />
+                    <circle cx="300" cy="30" r="4" fill="var(--color-primary)" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Members Table -->
+        <div class="glass-card table-container">
+            <h3>Miembros Recientes</h3>
+            <table class="members-table">
+                <thead>
+                    <tr>
+                        <th>MIEMBRO</th>
+                        <th>ROL</th>
+                        <th>ESTADO</th>
+                        <th class="text-right">ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="table-user">
+                                <div class="avatar-sm bg-orange">JP</div>
+                                <span>Juan Pérez</span>
+                            </div>
+                        </td>
+                        <td>Colaborador</td>
+                        <td><span class="status-dot online"></span> Activo</td>
+                        <td class="text-right">
+                            <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="table-user">
+                                <div class="avatar-sm bg-indigo">MG</div>
+                                <span>Maria Gomez</span>
+                            </div>
+                        </td>
+                        <td>Moderador</td>
+                        <td><span class="status-dot offline"></span> Inactivo</td>
+                        <td class="text-right">
+                            <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bottom Section: Settings & Floating Notifications -->
+    <div class="bottom-dashboard-grid">
+        <!-- Settings Blocks -->
+        <div class="glass-card settings-section">
+            <h3>Configuración</h3>
+            <div class="settings-group">
+                <div class="setting-item">
+                    <div class="setting-text">
+                        <span class="setting-title">Notificaciones</span>
+                        <span class="setting-desc">Recibir alertas de nuevos miembros</span>
                     </div>
-                    <div class="feed-content">
-                        <strong>Juan Perez</strong> se unió a la comunidad.
-                        <span>Hace 5 minutos</span>
-                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
                 </div>
-                <div class="feed-item">
-                    <div class="user-avatar-small">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user2" alt="avatar" />
+                <div class="setting-item">
+                    <div class="setting-text">
+                        <span class="setting-title">Apariencia</span>
+                        <span class="setting-desc">Modo oscuro automático</span>
                     </div>
-                    <div class="feed-content">
-                        <strong>Maria Gomez</strong> publicó un nuevo recurso en el canal #react.
-                        <span>Hace 2 horas</span>
-                    </div>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
                 </div>
             </div>
         </div>
 
-        <div class="quick-actions glass-morphic">
-            <h2>Acciones Rápidas</h2>
-            <div class="action-buttons">
-                <button class="action-btn"><i class="fas fa-plus"></i> Crear Evento</button>
-                <button class="action-btn"><i class="fas fa-bullhorn"></i> Enviar Anuncio</button>
-                <button class="action-btn"><i class="fas fa-user-plus"></i> Invitar Miembros</button>
-                <button class="action-btn secondary"><i class="fas fa-file-export"></i> Exportar Datos</button>
+        <!-- Floating Notifications (Glassmorphism) -->
+        <div class="glass-notification-panel">
+            <div class="notif-header">
+                <h3>Alertas Recientes</h3>
+            </div>
+            <div class="notif-list">
+                <div class="notif-item">Nueva solicitud de registro en 'React CTech'</div>
+                <div class="notif-item">El evento 'Workshop Next.js' comienza en 2h</div>
+                <div class="notif-item">Corte de servidores programado para mañana</div>
             </div>
         </div>
     </div>
@@ -77,104 +142,236 @@ import LeaderLayout from '../../layouts/LeaderLayout.astro';
     <style>
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .glass-morphic {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 1.8rem;
+            margin-bottom: 2rem;
         }
 
         .stat-card {
             display: flex;
             align-items: center;
-            gap: 1.2rem;
-            transition: all 0.3s ease;
+            gap: 1.5rem;
         }
 
-        .stat-card:hover { transform: translateY(-8px); border-color: rgba(16, 185, 129, 0.3); }
-
-        .icon-box {
-            width: 55px;
-            height: 55px;
-            border-radius: 16px;
+        .stat-icon-wrapper {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
         }
 
-        .emerald { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-        .mint { background: rgba(52, 211, 153, 0.15); color: #6ee7b7; }
-        .teal { background: rgba(20, 184, 166, 0.15); color: #5eead4; }
-        .lime { background: rgba(132, 204, 22, 0.15); color: #bef264; }
+        .pastel-blue { background-color: #E0F2FE; color: #0EA5E9; }
+        .pastel-green { background-color: #DCFCE7; color: #10B981; }
+        .pastel-purple { background-color: #F3E8FF; color: #A855F7; }
 
-        .stat-info h3 { font-size: 2rem; margin: 0; font-weight: 900; letter-spacing: -0.02em; }
-        .stat-info p { margin: 0.1rem 0 0; font-size: 0.9rem; color: rgba(255, 255, 255, 0.5); font-weight: 500; }
+        .stat-value {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary-dark);
+            line-height: 1;
+        }
 
-        .community-overview {
+        .stat-label {
+            margin: 0.2rem 0 0;
+            color: var(--color-blue-grey);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .main-dashboard-content {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .section-header h2 { font-size: 1.4rem; margin: 0; }
-        
-        .activity-feed h2, .quick-actions h2 { font-size: 1.4rem; margin-bottom: 1.5rem; }
+        .chart-container {
+            height: 100%;
+        }
 
-        .feed-items { display: flex; flex-direction: column; gap: 1.2rem; }
-
-        .feed-item {
+        .chart-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 1.2rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.01);
-            border-radius: 16px;
-            transition: background 0.3s ease;
+            margin-bottom: 1.5rem;
         }
 
-        .feed-item:hover { background: rgba(255, 255, 255, 0.03); }
+        .chart-header h3 { margin: 0; font-size: 1.1rem; color: var(--color-primary-dark); }
 
-        .user-avatar-small img { width: 36px; height: 36px; border-radius: 10px; }
+        .growth-badge {
+            background-color: #DCFCE7;
+            color: #166534;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
 
-        .feed-content { flex: 1; font-size: 0.95rem; line-height: 1.4; color: rgba(255, 255, 255, 0.7); }
-        .feed-content strong { color: white; font-weight: 600; }
-        .feed-content span { display: block; font-size: 0.8rem; color: rgba(255, 255, 255, 0.3); margin-top: 0.2rem; }
+        .chart-mock {
+            height: 150px;
+            display: flex;
+            align-items: flex-end;
+            padding: 1rem 0;
+        }
 
-        .action-buttons { display: flex; flex-direction: column; gap: 1rem; }
+        .trend-line { width: 100%; height: 100%; }
 
-        .action-btn {
+        .table-container h3 { margin: 0 0 1.5rem 0; font-size: 1.1rem; color: var(--color-primary-dark); }
+
+        .members-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .members-table th {
+            text-align: left;
+            font-size: 0.75rem;
+            font-variant: small-caps;
+            color: var(--color-blue-grey);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-light-grey);
+        }
+
+        .members-table td {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-light-grey);
+            font-size: 0.9rem;
+            color: var(--color-primary-dark);
+        }
+
+        .table-user {
             display: flex;
             align-items: center;
             gap: 0.8rem;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border: none;
-            color: white;
-            padding: 0.9rem 1.4rem;
-            border-radius: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .action-btn:hover { box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); transform: scale(1.02); }
-        .action-btn.secondary { background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .action-btn.secondary:hover { background: rgba(255, 255, 255, 0.08); }
+        .avatar-sm {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .bg-orange { background-color: #F97316; }
+        .bg-indigo { background-color: #6366F1; }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.4rem;
+        }
+
+        .online { background-color: #22C55E; }
+        .offline { background-color: #94A3B8; }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--color-blue-grey);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .delete-btn:hover { color: #EF4444; }
+        .text-right { text-align: right; }
+
+        .bottom-dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .settings-section h3 { margin: 0 0 1.5rem 0; font-size: 1.1rem; color: var(--color-primary-dark); }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-light-grey);
+        }
+
+        .setting-item:last-child { border-bottom: none; }
+
+        .setting-title { display: block; font-weight: 600; font-size: 0.95rem; }
+        .setting-desc { font-size: 0.8rem; color: var(--color-blue-grey); }
+
+        /* Switch UI */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #E2E8F0;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        input:checked + .slider { background-color: var(--color-azure-radiant); }
+        input:checked + .slider:before { transform: translateX(20px); }
+        .slider.round { border-radius: 34px; }
+        .slider.round:before { border-radius: 50%; }
+
+        /* Glassmorphism Panel */
+        .glass-notification-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .glass-notification-panel h3 { margin: 0 0 1rem 0; font-size: 1.1rem; color: var(--color-primary-dark); }
+
+        .notif-list { display: flex; flex-direction: column; }
+
+        .notif-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: 0.85rem;
+            color: var(--color-primary-dark);
+        }
+
+        .notif-item:last-child { border-bottom: none; }
 
         @media (max-width: 1200px) {
-            .community-overview { grid-template-columns: 1fr; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .main-dashboard-content { grid-template-columns: 1fr; }
+            .bottom-dashboard-grid { grid-template-columns: 1fr; }
         }
     </style>
 </LeaderLayout>
 
 <script>
+    /* ⚠️ BYPASS TEMPORAL - SOLO SIMULACRO VISUAL. Reactivar antes de producción.
     import { authManager, requireRole } from '../../utils/auth.js';
     // Proteger la vista
     if (!requireRole('leader')) {
@@ -183,5 +380,7 @@ import LeaderLayout from '../../layouts/LeaderLayout.astro';
 
     const auth = authManager;
     const user = auth.getUser();
+    */
+    console.info('[BYPASS VISUAL] leader/index.astro: guard de auth deshabilitado temporalmente.');
 </script>
 

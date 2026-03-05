@@ -8,11 +8,7 @@
     <div class="form-group">
         <label for="community">Comunidad CTech</label>
         <select id="community" name="community">
-            <option value="">Selecciona una comunidad</option>
-            <!-- TODO: Las comunidades se cargarán dinámicamente desde el backend -->
-            <option value="Tech-community">Tech community Web</option>
-            <option value="AWSUG-Medellin">AW UG Medellin</option>
-            <option value="Pioneras">Pioneras</option>
+            <!-- Las comunidades se cargan dinámicamente -->
         </select>
         <span class="error-message" id="communityError"></span>
     </div>
@@ -418,12 +414,21 @@ document.addEventListener('DOMContentLoaded', () => {
             // Validaciones Visuales Frontend
             if (!community) { showError('community', 'communityError', 'La comunidad es obligatoria'); hasErrors = true; }
             if (!inviteCode) { showError('inviteCode', 'inviteCodeError', 'Código requerido'); hasErrors = true; }
-            if (!fullName) { showError('fullName', 'fullNameError', 'El nombre es obligatorio'); hasErrors = true; }
+            
+            // Validación de nombre: 10-65 chars, solo letras y espacios
+            const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+            if (!fullName) { 
+                showError('fullName', 'fullNameError', 'El nombre es obligatorio'); hasErrors = true; 
+            } else if (fullName.length < 10 || fullName.length > 65) {
+                showError('fullName', 'fullNameError', 'Mínimo 10 y máximo 65 caracteres'); hasErrors = true;
+            } else if (!nameRegex.test(fullName)) {
+                showError('fullName', 'fullNameError', 'Solo letras y espacios'); hasErrors = true;
+            }
+
             if (!email || !/^\S+@\S+\.\S+$/.test(email)) { showError('email_signup', 'emailSignupError', 'Correo inválido'); hasErrors = true; }
-            if (password.length < 8) { showError('password_signup', 'passwordSignupError', 'Min. 8 caracteres'); hasErrors = true; }
+            if (password.length < 5) { showError('password_signup', 'passwordSignupError', 'Mínimo 5 caracteres'); hasErrors = true; }
             if (password !== confirmPassword) { 
                 showError('confirmPassword', 'confirmPasswordError', 'Las contraseñas no coinciden'); 
-                showError('password_signup', 'passwordSignupError', 'Las contraseñas no coinciden'); 
                 hasErrors = true; 
             }
             if (!termsAccepted) { 
@@ -449,12 +454,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const userData = {
-                community_id: community,      // actualiza key
+                community_id: community,      
                 inviteCode,
                 fullName,
                 email,
-                password,
-                terms: true
+                password
             };
             const result = await authManager.register(userData);
 
@@ -480,10 +484,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Placeholder para cargar comunidades dinámicamente en el futuro
+    // Cargar comunidades dinámicamente
     async function loadCommunities() {
-        // TODO: implementar cuando exista el backend
+        const communitySelect = document.getElementById('community');
+        if (!communitySelect) return;
+
+        try {
+            const mod = await import('../../utils/auth.js');
+            const AuthManager = mod.AuthManager;
+            const communities = await AuthManager.fetch('/communities');
+            
+            if (communities && Array.isArray(communities)) {
+                communitySelect.innerHTML = '<option value="">Selecciona una comunidad</option>';
+                communities.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id_community;
+                    opt.textContent = c.name_community;
+                    communitySelect.appendChild(opt);
+                });
+            }
+        } catch (err) {
+            console.error('Error al cargar comunidades:', err);
+        }
     }
-    // loadCommunities();
+    loadCommunities();
 });
 </script>
