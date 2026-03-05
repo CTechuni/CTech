@@ -1,12 +1,15 @@
 from sqlalchemy.orm import Session
-from . import repository, models
+from . import repository, schemas
+from app.modules.auth.service import get_password_hash
 
+def create_user(db: Session, user_data: schemas.UserCreate):
+    user_dict = user_data.model_dump()
+    user_dict["password_hash"] = get_password_hash(user_dict.pop("password"))
+    return repository.create(db, user_dict)
 
-def authenticate_user(db: Session, email: str, password: str):
-    user = repository.get_user_by_email(db, email)
-    if not user:
-        return None
-    # por ahora comparamos el hash directamente; reemplazar con algo seguro en produccion
-    if user.password_hash != password:
-        return None
-    return user
+def change_role(db: Session, user_id: int, new_role_id: int):
+    return repository.update(db, user_id, {"rol_id": new_role_id})
+
+def list_leaders(db: Session):
+    # Suponiendo que el rol_id de Leader es 3 según tu lógica
+    return repository.get_by_role(db, 3)

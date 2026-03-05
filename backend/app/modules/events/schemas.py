@@ -10,10 +10,10 @@ class EventBase(BaseModel):
     place: str
     url_form: str
     image: str
-    status: str
+    status: str = "activo"
 
 class EventCreate(EventBase):
-    created_by: Optional[int] = None
+    pass
 
 class EventResponse(EventBase):
     id_event: int

@@ -1,19 +1,20 @@
 from pydantic import BaseModel, EmailStr
-
+from typing import Optional
 
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
 
-
-class UserInToken(BaseModel):
-    id: int
-    email: EmailStr
-    name_user: str
-    role: str | None = None
-
-
-class TokenResponse(BaseModel):
+class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
-    user: UserInToken
+
+class TokenData(BaseModel):
+    email: Optional[str] = None
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str

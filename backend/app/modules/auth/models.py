@@ -1,0 +1,36 @@
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, Timestamp, func
+from sqlalchemy.orm import relationship
+from app.core.database import Base
+
+class Role(Base):
+    __tablename__ = "roles"
+
+    id_rol = Column(Integer, primary_key=True, index=True)
+    name_rol = Column(String(50), nullable=False, unique=True)
+    description_rol = Column(String(255))
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(150), unique=True, nullable=False)
+    password_hash = Column(Text, nullable=False)
+    name_user = Column(String(150))
+    rol_id = Column(Integer, ForeignKey("roles.id_rol"))
+    status = Column(String(50), default="active")
+    is_email_verified = Column(Boolean, default=False)
+    created_at = Column(Timestamp, server_default=func.now())
+
+    # Relación para acceder fácilmente al nombre del rol
+    role = relationship("Role")
+
+class TokenBlocklist(Base):
+    """
+    Tabla para gestionar el cierre de sesión (Logout).
+    Registra los tokens JWT que ya no deben ser aceptados.
+    """
+    __tablename__ = "token_blocklist"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    token = Column(Text, nullable=False, index=True)
+    blacklisted_at = Column(Timestamp, server_default=func.now())

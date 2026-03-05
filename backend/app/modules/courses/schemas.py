@@ -1,28 +1,27 @@
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel
+from typing import Optional, List, Dict
+from datetime import datetime
 
 class CourseBase(BaseModel):
-    title: str = Field(..., min_length=5, max_length=150)
-    description: Optional[str] = Field(None, min_length=10)
-    price: float = Field(default=0.0, ge=0.0, description="El precio no puede ser negativo")
-    duration: Optional[str] = None
-    image_url: Optional[str] = None
-    status: str = "active"
+    title: str
+    description: Optional[str] = None
+    is_premium: bool = False
+    technologies: List[str] = []
+    content_links: Dict[str, List[str]] = {"pdfs": [], "books": [], "videos": []}
+    thumbnail_url: Optional[str] = None
+    community_id: Optional[int] = None
+    mentor_id: Optional[int] = None
+    specialty_id: Optional[int] = None
 
 class CourseCreate(CourseBase):
-    instructor_id: int
+    pass
 
-class CourseUpdate(BaseModel):
+class CourseUpdate(CourseBase):
     title: Optional[str] = None
-    description: Optional[str] = None
-    price: Optional[float] = None
-    duration: Optional[str] = None
-    image_url: Optional[str] = None
-    status: Optional[str] = None
 
 class CourseResponse(CourseBase):
     id: int
-    instructor_id: int
+    created_at: datetime
 
     class Config:
         from_attributes = True

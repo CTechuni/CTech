@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, JSON, Timestamp, func
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 
@@ -6,12 +6,17 @@ class Course(Base):
     __tablename__ = "courses"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(200), nullable=False)
+    title = Column(String(255), nullable=False)
     description = Column(Text)
-    instructor_id = Column(Integer, ForeignKey("users.id"))
-    price = Column(Float, default=0.0)
-    duration = Column(String(50))
-    image_url = Column(String(500))
-    status = Column(String(50), default="active")
+    is_premium = Column(Boolean, default=False)
+    technologies = Column(JSON, default=[]) # Mapea el jsonb de tu SQL
+    content_links = Column(JSON, default={"pdfs": [], "books": [], "videos": []})
+    thumbnail_url = Column(Text)
+    mentor_id = Column(Integer, ForeignKey("users.id"))
+    community_id = Column(Integer, ForeignKey("communities.id_community"))
+    specialty_id = Column(Integer, ForeignKey("specialties.id"))
+    created_at = Column(Timestamp, server_default=func.now())
 
-    instructor = relationship("User")
+    # Relaciones para consultas potentes
+    community = relationship("Community")
+    mentor = relationship("User")

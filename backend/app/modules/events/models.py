@@ -11,6 +11,6 @@ class Event(Base):
     time_events = Column(Time)
     place = Column(String(155), nullable=False)
     url_form = Column(String(255), nullable=False)
-    image = Column(String(255), nullable=False)
+    image = Column(String(255), nullable=False) # Aquí se guarda la URL de Cloudinary
     created_by = Column(Integer, ForeignKey("users.id"))
-    status = Column(String(50), nullable=False)
+    status = Column(String(50), nullable=False, default="activo")

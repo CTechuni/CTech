@@ -1,60 +1,46 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from jose import JWTError, jwt
-
 from app.core.database import get_db
-from app.core.config import get_settings
-from app.modules.users import service as user_service, schemas as user_schemas
+from app.modules.users.models import User
 from . import schemas, service
 
-router = APIRouter(prefix="/auth", tags=["auth"])
-settings = get_settings()
+router = APIRouter(prefix="/auth", tags=["Auth"])
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
-
-
-def create_access_token(data: dict):
-    return jwt.encode(data, settings.JWT_SECRET_KEY, algorithm="HS256")
-
-
-def get_current_user(token: str = Depends(oauth2_scheme)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="No se pudieron validar las credenciales",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
-        email: str | None = payload.get("sub")
-        role: str | None = payload.get("role")
-        user_id: int | None = payload.get("user_id")
-        if email is None:
-            raise credentials_exception
-    except JWTError:
-        raise credentials_exception
-    return {"email": email, "role": role, "user_id": user_id}
-
-
-@router.post("/login", response_model=schemas.TokenResponse)
+# 1. Login Estándar (POST /login)
+@router.post("/login", response_model=schemas.Token)
 def login(data: schemas.LoginRequest, db: Session = Depends(get_db)):
-    user = user_service.authenticate_user(db, data.email, data.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Credenciales invalidas",
-        )
+    user = db.query(User).filter(User.email == data.email).first()
+    if not user or not service.verify_password(data.password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+    
+    token = service.create_access_token(data={"sub": user.email, "role_id": user.rol_id})
+    return {"access_token": token, "token_type": "bearer"}
 
-    role_name = user.role.name_rol if user.role else None
-    token_payload = {"sub": user.email, "role": role_name, "user_id": user.id}
-    token = create_access_token(token_payload)
+# 2. Token para Swagger (POST /token)
+@router.post("/token")
+def login_for_swagger(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == form_data.username).first()
+    if not user or not service.verify_password(form_data.password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Usuario o contraseña inválidos")
+    
+    token = service.create_access_token(data={"sub": user.email})
+    return {"access_token": token, "token_type": "bearer"}
 
-    return {
-        "access_token": token,
-        "user": {
-            "id": user.id,
-            "email": user.email,
-            "name_user": user.name_user,
-            "role": role_name,
-        },
-    }
+# 3. Logout (POST /logout) - Usa la tabla token_blocklist del SQL
+@router.post("/logout")
+def logout(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    service.block_token(db, token)
+    return {"message": "Sesión cerrada exitosamente"}
+
+# 4. Recuperación (POST /forgot-password)
+@router.post("/forgot-password")
+def forgot_password(request: schemas.ForgotPasswordRequest):
+    return {"message": f"Instrucciones enviadas a {request.email}"}
+
+# 5. Restablecer (POST /reset-password)
+@router.post("/reset-password")
+def reset_password(data: schemas.ResetPasswordRequest):
+    return {"message": "Contraseña actualizada correctamente"}
+

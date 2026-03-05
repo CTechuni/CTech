@@ -5,7 +5,8 @@ def get_all_events(db: Session):
     return db.query(models.Event).all()
 
 def create_event(db: Session, event: schemas.EventCreate, user_id: int):
-    db_obj = models.Event(**event.dict())
+    # Convertimos el esquema a diccionario y añadimos el autor
+    db_obj = models.Event(**event.model_dump())
     db_obj.created_by = user_id
     db.add(db_obj)
     db.commit()

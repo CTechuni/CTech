@@ -1,29 +1,17 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Text, TIMESTAMP
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, Timestamp, func
 from sqlalchemy.orm import relationship
 from app.core.database import Base
-
-
-class Role(Base):
-    __tablename__ = "roles"
-
-    id_rol = Column(Integer, primary_key=True, index=True)
-    name_rol = Column(String(150), unique=True, nullable=False)
-    description = Column(Text)
-
-    users = relationship("User", back_populates="role")
-
 
 class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    name_user = Column(String(150), nullable=False)
-    email = Column(String(150), unique=True, nullable=False, index=True)
-    password_hash = Column(String(150), nullable=False)
+    email = Column(String(150), unique=True, nullable=False)
+    password_hash = Column(Text, nullable=False)
+    name_user = Column(String(150))
     rol_id = Column(Integer, ForeignKey("roles.id_rol"))
-    community_id = Column(Integer)
-    profile_id = Column(Integer)
-    registration_date = Column(TIMESTAMP)
     status = Column(String(50), default="active")
+    is_email_verified = Column(Boolean, default=False)
+    created_at = Column(Timestamp, server_default=func.now())
 
-    role = relationship("Role", back_populates="users")
+    role = relationship("Role")
