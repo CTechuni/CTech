@@ -25,5 +25,5 @@ def demote(user_id: int, db: Session = Depends(get_db), current=Depends(get_curr
     return service.change_role(db, user_id, 4) # 4 para User estándar
 
 @router.get("/leaders", response_model=list[schemas.UserResponse])
-def get_leaders(db: Session = Depends(get_db), current=Depends(get_current_user)):
+def get_leaders(db: Session = Depends(get_db)): #, current=Depends(get_current_user)):
     return service.list_leaders(db)

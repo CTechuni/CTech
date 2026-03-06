@@ -60,3 +60,4 @@ app.include_router(admin_router, prefix=api_prefix)
 @app.get("/", tags=["Root"])
 def read_root():
     return {"message": "Bienvenido a CTech API - Proyecto SENA Ficha 2995403"}
+ 

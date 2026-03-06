@@ -87,7 +87,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     </div>
 
     <!-- BOTTOM ROW -->
-    <div class="charts-grid mt-4">
+    <div class="charts-grid mt-4 single-col">
         <!-- MEMBERS BY COMMUNITY -->
         <div class="chart-card medium-chart">
             <div class="chart-header">
@@ -181,7 +181,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 </div>
 
 <style>
-    .dashboard-wrap { display: block; padding-bottom: 2rem; }
+    .dashboard-wrap { display: block; }
     
     .dashboard-wrap > div { margin-bottom: 1.5rem; }
 
@@ -238,6 +238,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
     /* CHARTS MINIMAL */
     .charts-grid { display: grid; grid-template-columns: 2fr 1.2fr; gap: 1.25rem; margin-top: 1rem; }
+    .charts-grid.single-col { grid-template-columns: 1fr; }
     .chart-card { background: #FFFFFF; border: 1px solid #F1F5F9; border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; }
     .chart-card.no-padding { padding: 0; overflow: hidden; }
     
@@ -269,12 +270,14 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     .relative-chart-container {
         position: relative;
         width: 100%;
+        min-width: 0;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
     }
 
     .chart-container { height: 200px; position: relative; }
-    .large-chart .chart-container { height: 200px; }
+    .large-chart .chart-container { height: 200px; padding: 0 1.5rem 0.5rem; }
     .pie-container { height: 180px; }
     
     /* UPCOMING EVENTS */
