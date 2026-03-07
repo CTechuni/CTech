@@ -41,10 +41,10 @@ const menuItems = [
 
     <!-- Profile Card -->
     <div class="profile-card">
-        <div class="profile-avatar">LM</div>
+        <div class="profile-avatar" id="sidebarAvatar">--</div>
         <div class="profile-info">
-            <span class="profile-name">Laura Méndez</span>
-            <span class="profile-community">DevFront Colombia</span>
+            <span class="profile-name" id="sidebarName">Cargando...</span>
+            <span class="profile-community" id="sidebarCommunity">--</span>
         </div>
         <div class="profile-badge">Líder</div>
     </div>
@@ -276,27 +276,36 @@ const menuItems = [
 </style>
 
 <script>
-    /* ⚠️ BYPASS TEMPORAL - SOLO SIMULACRO VISUAL. Reactivar antes de producción.
-    import { AuthManager, authManager } from "../../utils/auth.js";
+    import { authManager } from "../../utils/auth.js";
 
+    // 1. Cargar datos del perfil
+    function loadSidebarProfile() {
+        const user = authManager.getUser();
+        if (user) {
+            const avatar = document.getElementById('sidebarAvatar');
+            const name = document.getElementById('sidebarName');
+            const community = document.getElementById('sidebarCommunity');
+
+            if (avatar) avatar.textContent = user.name_user.substring(0, 2).toUpperCase();
+            if (name) name.textContent = user.name_user;
+            if (community) community.textContent = user.community_name || 'Sin Comunidad';
+        }
+    }
+
+    // 2. Logout Real
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
-        const auth = authManager;
-        auth.logout();
+        authManager.logout();
         window.location.href = '/login';
     });
-    */
 
-    // Logout estático para simulacro
-    document.getElementById('logoutBtn')?.addEventListener('click', () => {
-        console.info('[BYPASS VISUAL] Logout deshabilitado durante simulacro.');
-        window.location.href = '/';
-    });
-
-    // Mark active link
+    // 3. Marcar link activo
     const currentPath = window.location.pathname;
     document.querySelectorAll('.nav-item').forEach(link => {
         const href = link.getAttribute('href')?.split('?')[0];
         const isActive = href === currentPath || (href !== '/leader' && currentPath.startsWith(href));
         if (isActive) link.classList.add('active');
     });
+
+    // Inicializar
+    loadSidebarProfile();
 </script>

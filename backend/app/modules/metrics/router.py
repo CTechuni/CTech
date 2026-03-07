@@ -10,3 +10,7 @@ router = APIRouter(prefix="/metrics", tags=["Metrics"])
 def get_admin_metrics(db: Session = Depends(get_db), current=Depends(get_current_user)):
     # Solo accesible con token (candado en la imagen)
     return service.get_admin_dashboard(db)
+
+@router.get("/community/{community_id}")
+def get_community_metrics(community_id: int, db: Session = Depends(get_db), current=Depends(get_current_user)):
+    return service.get_leader_dashboard(db, community_id)

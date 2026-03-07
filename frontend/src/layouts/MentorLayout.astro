@@ -20,6 +20,12 @@ const { title, subtitle } = Astro.props;
     <title>{title} | Mentor Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
+    <script>
+        import { requireRole, authManager } from '../utils/auth.js';
+        if (requireRole('mentor')) {
+            authManager.initInactivityTimer(120);
+        }
+    </script>
 </head>
 <body class="mentor-body">
     <div class="mentor-container">

@@ -26,6 +26,12 @@ const { title = 'Mi Comunidad', subtitle = 'DevFront Colombia' } = Astro.props;
     <script src="https://cdn.jsdelivr.net/npm/chart.js" is:inline></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        import { requireRole, authManager } from '../utils/auth.js';
+        if (requireRole('leader')) {
+            authManager.initInactivityTimer(120);
+        }
+    </script>
 </head>
 <body class="leader-body">
     <LeaderSidebar />

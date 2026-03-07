@@ -14,7 +14,7 @@ import LeaderLayout from '../../layouts/LeaderLayout.astro';
                     </svg>
                 </div>
                 <div class="metric-info">
-                    <span class="metric-value">4</span>
+                    <span class="metric-value" id="leaderMembersCount">0</span>
                     <p class="metric-label">Miembros activos</p>
                 </div>
             </div>
@@ -25,7 +25,7 @@ import LeaderLayout from '../../layouts/LeaderLayout.astro';
 </svg>
                 </div>
                 <div class="metric-info">
-                    <span class="metric-value">2</span>
+                    <span class="metric-value" id="leaderCoursesCount">0</span>
                     <p class="metric-label">Cursos activos</p>
                 </div>
             </div>
@@ -36,7 +36,7 @@ import LeaderLayout from '../../layouts/LeaderLayout.astro';
                     </svg>
                 </div>
                 <div class="metric-info">
-                    <span class="metric-value">2</span>
+                    <span class="metric-value" id="leaderEventsCount">0</span>
                     <p class="metric-label">Eventos programados</p>
                 </div>
             </div>
@@ -47,7 +47,7 @@ import LeaderLayout from '../../layouts/LeaderLayout.astro';
 </svg>
                 </div>
                 <div class="metric-info">
-                    <span class="metric-value">1</span>
+                    <span class="metric-value" id="leaderMentorsCount">0</span>
                     <p class="metric-label">Mentores</p>
                 </div>
             </div>
@@ -92,101 +92,7 @@ import LeaderLayout from '../../layouts/LeaderLayout.astro';
                             <th class="px-4 text-center">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="px-4">
-                                <div class="user-cell">
-                                    <div class="avatar bg-soft-blue">JM</div>
-                                    <div class="user-meta">
-                                        <span class="user-name">Julián Morales</span>
-                                        <span class="user-email">julian.morales@example.com</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 text-center"><span class="badge rounded-pill role-badge mentor">Mentor</span></td>
-                            <td class="px-4 text-center"><span class="status-badge active">activo</span></td>
-                            <td class="px-4">
-                                <div class="actions">
-                                    <button class="btn-quit-mentor">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hero-icon-sm">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                                        </svg>
-                                        Quitar Mentor
-                                    </button>
-                                    <button class="btn-delete">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="hero-icon-sm">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1 -2.244 2.077H8.084a2.25 2.25 0 0 1 -2.244 -2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0 -3.478 -.397m-12 .562c.34 -.059.68 -.114 1.022 -.165m0 0a48.11 48.11 0 0 1 3.478 -.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0 -3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0 -7.5 0" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-4">
-                                <div class="user-cell">
-                                    <div class="avatar bg-soft-blue">JP</div>
-                                    <div class="user-meta">
-                                        <span class="user-name">Juan Pérez</span>
-                                        <span class="user-email">juan.perez@example.com</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 text-center"><span class="badge rounded-pill role-badge member">Usuario</span></td>
-                            <td class="px-4 text-center"><span class="status-badge active">activo</span></td>
-                            <td class="px-4">
-                                <div class="actions">
-                                    <button class="btn-delete">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="hero-icon-sm">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1 -2.244 2.077H8.084a2.25 2.25 0 0 1 -2.244 -2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0 -3.478 -.397m-12 .562c.34 -.059.68 -.114 1.022 -.165m0 0a48.11 48.11 0 0 1 3.478 -.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0 -3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0 -7.5 0" />
-                                    </svg>
-                                </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-4">
-                                <div class="user-cell">
-                                    <div class="avatar bg-soft-blue">MG</div>
-                                    <div class="user-meta">
-                                        <span class="user-name">Maria Gomez</span>
-                                        <span class="user-email">m.gomez@example.com</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 text-center"><span class="badge rounded-pill role-badge member">Usuario</span></td>
-                            <td class="px-4 text-center"><span class="status-badge active">activo</span></td>
-                            <td class="px-4">
-                                <div class="actions">
-                                    <button class="btn-delete">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="hero-icon-sm">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1 -2.244 2.077H8.084a2.25 2.25 0 0 1 -2.244 -2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0 -3.478 -.397m-12 .562c.34 -.059.68 -.114 1.022 -.165m0 0a48.11 48.11 0 0 1 3.478 -.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0 -3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0 -7.5 0" />
-                                    </svg>
-                                </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-4">
-                                <div class="user-cell">
-                                    <div class="avatar bg-soft-blue">RL</div>
-                                    <div class="user-meta">
-                                        <span class="user-name">Ricardo Luna</span>
-                                        <span class="user-email">r.luna@example.com</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 text-center"><span class="badge rounded-pill role-badge leader">Líder</span></td>
-                            <td class="px-4 text-center"><span class="status-badge active">activo</span></td>
-                            <td class="px-4">
-                                <div class="actions">
-                                    <button class="btn-delete">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="hero-icon-sm">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1 -2.244 2.077H8.084a2.25 2.25 0 0 1 -2.244 -2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0 -3.478 -.397m-12 .562c.34 -.059.68 -.114 1.022 -.165m0 0a48.11 48.11 0 0 1 3.478 -.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0 -3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0 -7.5 0" />
-                                    </svg>
-                                </button>
-                                </div>
-                            </td>
-                        </tr>
+                    <tbody id="leaderMembersTableBody">
                     </tbody>
                 </table>
             </div>
@@ -561,7 +467,9 @@ import LeaderLayout from '../../layouts/LeaderLayout.astro';
     </style>
 </LeaderLayout>
 
-<script is:inline>
+<script type="module">
+    import { AuthManager, authManager } from "../../utils/auth.js";
+
     window.addEventListener('load', function() {
         // @ts-ignore
         const ChartLib = window.Chart;
@@ -594,17 +502,9 @@ import LeaderLayout from '../../layouts/LeaderLayout.astro';
                 responsive: true,
                 maintainAspectRatio: false,
                 layout: {
-                    padding: {
-                        left: 15,
-                        right: 25,
-                        top: 15,
-                        bottom: 10
-                    }
+                    padding: { left: 15, right: 25, top: 15, bottom: 10 }
                 },
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
-                },
+                interaction: { intersect: false, mode: 'index' },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
@@ -618,9 +518,7 @@ import LeaderLayout from '../../layouts/LeaderLayout.astro';
                         boxPadding: 4,
                         usePointStyle: true,
                         callbacks: {
-                            label: function(context) {
-                                return ` Miembros: ${context.parsed.y}`;
-                            },
+                            label: function(context) { return ` Miembros: ${context.parsed.y}`; },
                             afterLabel: function(context) {
                                 const dataset = context.dataset.data;
                                 const index = context.dataIndex;
@@ -639,116 +537,116 @@ import LeaderLayout from '../../layouts/LeaderLayout.astro';
                 },
                 scales: {
                     x: {
-                        grid: {
-                            display: true,
-                            color: '#f1f5f9'
-                        },
-                        ticks: {
-                            color: '#94a3b8',
-                            font: { size: 11, family: 'Inter' },
-                            padding: 5
-                        },
+                        grid: { display: true, color: '#f1f5f9' },
+                        ticks: { color: '#94a3b8', font: { size: 11, family: 'Inter' }, padding: 5 },
                         border: { display: false }
                     },
                     y: {
                         beginAtZero: true,
                         display: true,
-                        grid: {
-                            color: '#f1f5f9'
-                        },
-                        ticks: {
-                            color: '#94a3b8',
-                            font: { size: 11, family: 'Inter' },
-                            padding: 10
-                        },
+                        grid: { color: '#f1f5f9' },
+                        ticks: { color: '#94a3b8', font: { size: 11, family: 'Inter' }, padding: 10 },
                         border: { display: false }
                     }
                 }
             }
         });
 
+        // --- Carga de Datos Dinámicos ---
+        async function loadLeaderData() {
+            const user = authManager.getUser();
+            if (!user || !user.community_id) {
+                console.warn('Contexto de líder no encontrado, re-intentando en 500ms...');
+                setTimeout(loadLeaderData, 500);
+                return;
+            }
 
-        // --- Interaction Logic: Members Table ---
-        const searchInput = document.querySelector('.search-box input');
-        const tableRows = document.querySelectorAll('.leader-table tbody tr');
+            const communityId = user.community_id;
+            console.log('Cargando datos para comunidad:', communityId);
 
-        // 1. Functional Search (Multi-filter: Name or Role)
-        if (searchInput) {
-            searchInput.addEventListener('input', function(e) {
-                const term = e.target.value.toLowerCase();
-                
-                tableRows.forEach(row => {
-                    const name = row.querySelector('.user-name').textContent.toLowerCase();
-                    const role = row.querySelector('.role-badge').textContent.toLowerCase();
+            try {
+                // 1. Cargar Métricas
+                const metrics = await AuthManager.fetch(`/metrics/community/${communityId}`);
+                if (metrics) {
+                    document.getElementById('leaderMembersCount').textContent = metrics.total_users || 0;
+                    document.getElementById('leaderCoursesCount').textContent = metrics.total_courses || 0;
+                    document.getElementById('leaderEventsCount').textContent = metrics.active_events || 0;
+                    document.getElementById('leaderMentorsCount').textContent = metrics.total_mentors || 0;
+                }
+
+                // 2. Cargar Miembros
+                const members = await AuthManager.fetch(`/users/community/${communityId}`);
+                const tbody = document.getElementById('leaderMembersTableBody');
+                if (members && tbody) {
+                    tbody.innerHTML = members.map(m => `
+                        <tr>
+                            <td class="px-4">
+                                <div class="user-cell">
+                                    <div class="avatar bg-soft-blue">${m.name_user.substring(0, 2).toUpperCase()}</div>
+                                    <div class="user-meta">
+                                        <span class="user-name">${m.name_user}</span>
+                                        <span class="user-email">${m.email}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-4 text-center">
+                                <span class="badge rounded-pill role-badge ${m.role_name?.toLowerCase() || 'member'}">${m.role_name || 'Usuario'}</span>
+                            </td>
+                            <td class="px-4 text-center"><span class="status-badge active">activo</span></td>
+                            <td class="px-4 text-center">
+                                <div class="actions">
+                                    ${m.rol_id === 2 ? `
+                                        <button class="btn-quit-mentor" data-id="${m.id}" title="Quitar Mentor">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hero-icon-sm">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                            </svg>
+                                        </button>
+                                    ` : ''}
+                                    <button class="btn-delete" data-id="${m.id}" title="Eliminar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="hero-icon-sm">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1 -2.244 2.077H8.084a2.25 2.25 0 0 1 -2.244 -2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0 -3.478 -.397m-12 .562c.34 -.059.68 -.114 1.022 -.165m0 0a48.11 48.11 0 0 1 3.478 -.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0 -3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0 -7.5 0" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
                     
-                    if (name.includes(term) || role.includes(term)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
+                    initTableEvents();
+                }
+
+            } catch (error) {
+                console.error('Error al cargar datos del líder:', error);
+            }
+        }
+
+        function initTableEvents() {
+            const searchInput = document.querySelector('.search-box input');
+            const tableRows = document.querySelectorAll('.leader-table tbody tr');
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const term = e.target.value.toLowerCase();
+                    tableRows.forEach(row => {
+                        const name = row.querySelector('.user-name').textContent.toLowerCase();
+                        const role = row.querySelector('.role-badge').textContent.toLowerCase();
+                        row.style.display = (name.includes(term) || role.includes(term)) ? '' : 'none';
+                    });
                 });
+            }
+
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.onclick = function() {
+                    const row = this.closest('tr');
+                    const userId = this.getAttribute('data-id');
+                    // Aquí iría el llamado a la API para eliminar
+                    row.classList.add('row-fade-out');
+                    setTimeout(() => row.remove(), 400);
+                };
             });
         }
 
-        // 2. Button Actions: Delete Row
-        document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const row = this.closest('tr');
-                row.classList.add('row-fade-out');
-                setTimeout(() => {
-                    row.remove();
-                }, 400);
-            });
-        });
-
-        // 3. Button Actions: Quit Mentor (with SweetAlert2)
-        document.querySelectorAll('.btn-quit-mentor').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const row = this.closest('tr');
-                const mentorName = row.querySelector('.user-name').textContent;
-                
-                Swal.fire({
-                    title: '¿Confirmar cambio?',
-                    text: `¿Estás seguro de designar al mentor ${mentorName}?`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#9a3412',
-                    cancelButtonColor: '#94a3b8',
-                    confirmButtonText: 'Sí, designar',
-                    cancelButtonText: 'Cancelar',
-                    background: '#ffffff',
-                    customClass: {
-                        popup: 'rounded-16',
-                        confirmButton: 'pill-button',
-                        cancelButton: 'pill-button'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const badge = row.querySelector('.badge');
-                        
-                        // Change Mentor to Usuario (Image 2 style)
-                        badge.textContent = 'Usuario';
-                        badge.className = 'badge rounded-pill role-badge member';
-                        
-                        // Hide button
-                        this.classList.add('row-fade-out');
-                        setTimeout(() => {
-                            this.style.display = 'none';
-                        }, 400);
-
-                        Swal.fire({
-                            title: '¡Hecho!',
-                            text: 'El rol ha sido actualizado.',
-                            icon: 'success',
-                            confirmButtonColor: '#3b82f6',
-                            timer: 2000,
-                            timerProgressBar: true
-                        });
-                    }
-                });
-            });
-        });
+        loadLeaderData();
     });
-    console.info('[Leader Dashboard] Gráfico y lógica de interacción inicializados.');
 </script>
 

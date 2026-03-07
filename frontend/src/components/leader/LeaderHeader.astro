@@ -12,7 +12,7 @@ const { title = 'Mi Comunidad', subtitle = 'DevFront Colombia' } = Astro.props;
     <!-- Left: Title block -->
     <div class="header-title-block">
         <h1 class="header-title">{title}</h1>
-        <span class="header-subtitle">{subtitle}</span>
+        <span class="header-subtitle" id="headerCommunity">{subtitle}</span>
     </div>
 
     <!-- Right: Actions -->
@@ -29,8 +29,8 @@ const { title = 'Mi Comunidad', subtitle = 'DevFront Colombia' } = Astro.props;
 
         <!-- User Avatar + Name -->
         <div class="user-chip">
-            <div class="user-avatar">LM</div>
-            <span class="user-name">Laura</span>
+            <div class="user-avatar" id="headerAvatar">--</div>
+            <span class="user-name" id="headerName">Cargando...</span>
         </div>
     </div>
 </header>
@@ -157,16 +157,22 @@ const { title = 'Mi Comunidad', subtitle = 'DevFront Colombia' } = Astro.props;
 </style>
 
 <script>
-    /* ⚠️ BYPASS TEMPORAL - SOLO SIMULACRO VISUAL. Reactivar antes de producción.
-    import { AuthManager, authManager } from "../../utils/auth.js";
-    const auth = authManager;
-    const user = auth.getUser();
-    if (user) {
-        document.getElementById('userName').textContent = user.name_user || user.name;
-        if (user.community_name) {
-            document.getElementById('communityName').textContent = user.community_name;
+    import { authManager } from "../../utils/auth.js";
+
+    function loadHeaderProfile() {
+        const user = authManager.getUser();
+        if (user) {
+            const avatar = document.getElementById('headerAvatar');
+            const name = document.getElementById('headerName');
+            const community = document.getElementById('headerCommunity');
+
+            if (avatar) avatar.textContent = user.name_user.substring(0, 2).toUpperCase();
+            if (name) name.textContent = user.name_user.split(' ')[0]; // Solo primer nombre
+            if (community && user.community_name) {
+                community.textContent = user.community_name;
+            }
         }
     }
-    */
-    console.info('[BYPASS VISUAL] LeaderHeader: usando datos estáticos de Laura Méndez.');
+
+    loadHeaderProfile();
 </script>

@@ -1,47 +1,67 @@
-from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy.orm import Session, aliased
+from sqlalchemy import func, or_, and_
 from app.modules.users.models import User
 from . import models, schemas
 
 def get_all(db: Session):
-    # Optimized query with joins for members and leader name
-    Leader = db.query(User).subquery()
+    # Optimized query with joins for members and leader information
+    Member = aliased(User)
+    Leader = aliased(User)
     
-    query = db.query(
+    # We join Leader on:
+    # 1. Direct match with Community.leader_id
+    # 2. OR User with role 'leader' (3) assigned to this community_id
+    leader_join_cond = or_(
+        models.Community.leader_id == Leader.id,
+        and_(Leader.rol_id == 3, Leader.community_id == models.Community.id_community)
+    )
+
+    results = db.query(
         models.Community,
-        func.count(User.id).label("member_count")
-    ).outerjoin(User, User.community_id == models.Community.id_community)\
-     .group_by(models.Community.id_community)
-    
-    results = query.all()
+        func.count(Member.id).label("member_count"),
+        Leader.name_user.label("leader_name_direct"),
+        Leader.email.label("leader_email")
+    ).outerjoin(Member, Member.community_id == models.Community.id_community)\
+     .outerjoin(Leader, leader_join_cond)\
+     .group_by(models.Community.id_community, Leader.id)\
+     .all()
     
     final = []
-    for comm, count in results:
-        # Simple subquery or separate fetch for leader name to keep it clean
-        leader_name = None
-        if comm.leader_id:
-            leader = db.query(User.name_user).filter(User.id == comm.leader_id).first()
-            leader_name = leader[0] if leader else None
-        
+    for comm, count, l_name, l_email in results:
         comm.member_count = count
-        comm.leader_name = leader_name
+        # Fallback logic: prefer name_user, use email if name is empty/null
+        comm.leader_name = l_name if l_name else l_email
         final.append(comm)
         
     return final
 
 def get_by_id(db: Session, community_id: int):
-    comm = db.query(models.Community).filter(models.Community.id_community == community_id).first()
-    if comm:
-        # Add dynamic fields for the response schema
-        count = db.query(func.count(User.id)).filter(User.community_id == community_id).scalar()
-        leader_name = None
-        if comm.leader_id:
-            leader = db.query(User.name_user).filter(User.id == comm.leader_id).first()
-            leader_name = leader[0] if leader else None
-            
+    Member = aliased(User)
+    Leader = aliased(User)
+    
+    # Same flexible join condition
+    leader_join_cond = or_(
+        models.Community.leader_id == Leader.id,
+        and_(Leader.rol_id == 3, Leader.community_id == models.Community.id_community)
+    )
+
+    result = db.query(
+        models.Community,
+        func.count(Member.id).label("member_count"),
+        Leader.name_user.label("leader_name_direct"),
+        Leader.email.label("leader_email")
+    ).outerjoin(Member, Member.community_id == models.Community.id_community)\
+     .outerjoin(Leader, leader_join_cond)\
+     .filter(models.Community.id_community == community_id)\
+     .group_by(models.Community.id_community, Leader.id)\
+     .first()
+
+    if result:
+        comm, count, l_name, l_email = result
         comm.member_count = count or 0
-        comm.leader_name = leader_name
-    return comm
+        comm.leader_name = l_name if l_name else l_email
+        return comm
+    return None
 
 def create(db: Session, community: schemas.CommunityCreate):
     db_community = models.Community(**community.model_dump())

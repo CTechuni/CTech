@@ -9,14 +9,13 @@ class Course(Base):
     title = Column(String(255), nullable=False)
     description = Column(Text)
     is_premium = Column(Boolean, default=False)
-    technologies = Column(JSON, default=[]) # Mapea el jsonb de tu SQL
-    content_links = Column(JSON, default={"pdfs": [], "books": [], "videos": []})
+    technologies = Column(JSON, default=[]) 
+    content_links = Column(JSON)
     thumbnail_url = Column(Text)
     mentor_id = Column(Integer, ForeignKey("users.id"))
     community_id = Column(Integer, ForeignKey("communities.id_community"))
     specialty_id = Column(Integer, ForeignKey("specialties.id"))
     created_at = Column(DateTime, server_default=func.now())
 
-    # Relaciones para consultas potentes
-    community = relationship("Community")
+    # Relaciones
     mentor = relationship("User")

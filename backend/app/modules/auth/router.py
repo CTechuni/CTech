@@ -40,6 +40,18 @@ def register(data: schemas.UserCreate, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    # 4.1. Si es líder (3), sincronizar con la comunidad
+    if new_user.rol_id == 3 and new_user.community_id:
+        db.query(Community).filter(Community.id_community == new_user.community_id).update({"leader_id": new_user.id})
+        db.commit()
+
+    # 5. Vincular Perfil vacío automáticamente
+    from app.modules.users.models import Profile
+    new_profile = Profile(user_id=new_user.id)
+    db.add(new_profile)
+    db.commit()
+
     return {"message": "Usuario registrado exitosamente"}
 
 @router.post("/login", response_model=schemas.Token)

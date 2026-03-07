@@ -18,9 +18,14 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
 # --- Funciones de Contraseña ---
 
 def verify_password(plain_password, hashed_password):
+    # Bcrypt has a physical limit of 72 characters.
+    if len(plain_password) > 72:
+        return False
     return pwd_context.verify(plain_password, hashed_password)
 
 def get_password_hash(password):
+    if len(password) > 72:
+        raise ValueError("La contraseña excede el límite permitido por el sistema de seguridad (72 caracteres).")
     return pwd_context.hash(password)
 
 # --- Funciones de Token (JWT) ---

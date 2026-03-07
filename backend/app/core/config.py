@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     # Seguridad
     JWT_SECRET_KEY: str = "supersecreto"
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
     
     # Datos del Admin para el sembrado (init_db.py)
     ADMIN_EMAIL: str

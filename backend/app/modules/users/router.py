@@ -39,3 +39,6 @@ def delete_user(user_id: int, db: Session = Depends(get_db), current=Depends(get
     if not user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return {"message": "Usuario eliminado correctamente"}
+@router.get("/community/{community_id}", response_model=list[schemas.UserResponse])
+def list_community_members(community_id: int, db: Session = Depends(get_db), current=Depends(get_current_user)):
+    return service.get_all_by_community(db, community_id)

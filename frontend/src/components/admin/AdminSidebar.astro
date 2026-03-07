@@ -46,11 +46,11 @@ const menuItems = [
     <!-- Profile Card -->
     <div class="profile-card">
         <div class="profile-avatar" id="sideAvatarContainer">
-            <span id="userInitial">CR</span>
+            <span id="userInitial">...</span>
         </div>
         <div class="profile-info">
-            <span class="profile-name" id="userNameSide">Carlos Ramírez</span>
-            <span class="profile-community">Global</span>
+            <span class="profile-name" id="userNameSide">Cargando...</span>
+            <span class="profile-community" id="userCommSide">Administrador</span>
         </div>
         <div class="profile-badge">Admin</div>
     </div>
@@ -288,11 +288,9 @@ const menuItems = [
 </style>
 
 <script>
-    /* ⚠️ BYPASS TEMPORAL - SOLO SIMULACRO VISUAL. Reactivar antes de producción.
-    import { AuthManager, authManager } from "../../utils/auth.js";
-    const auth = authManager;
-
+    import { authManager as auth } from "../../utils/auth.js";
     const user = auth.getUser();
+
     if (user) {
         if (document.getElementById('userNameSide')) document.getElementById('userNameSide').textContent = user.name_user || 'Admin';
         
@@ -306,16 +304,6 @@ const menuItems = [
 
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
         auth.logout();
-        window.location.href = '/';
-    });
-    */
-
-    // Datos estáticos durante simulacro
-    console.info('[BYPASS VISUAL] AdminSidebar: usando datos estáticos Carlos Ramírez.');
-
-    // Logout estático para simulacro
-    document.getElementById('logoutBtn')?.addEventListener('click', () => {
-        console.info('[BYPASS VISUAL] Logout deshabilitado durante simulacro.');
         window.location.href = '/';
     });
 

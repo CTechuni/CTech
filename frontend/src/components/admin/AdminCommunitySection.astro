@@ -87,9 +87,9 @@
             <!-- Code -->
             <div class="comm-form-group">
                 <label class="comm-label" for="commCode">Código Único <span class="comm-required">*</span></label>
-                <input type="text" id="commCode" class="comm-input" placeholder="Ej: DvF#2024c" minlength="7" maxlength="12">
+                <input type="text" id="commCode" class="comm-input" placeholder="Ej: DvF#2024c" minlength="7" maxlength="15">
                 <div class="comm-field-error" id="commCodeError"></div>
-                <div class="comm-field-hint">7-12 caracteres: mayúscula, minúscula, número y signo especial</div>
+                <div class="comm-field-hint">7-15 caracteres: mayúscula, minúscula, número y signo especial</div>
             </div>
 
             <!-- Leader -->
@@ -909,7 +909,7 @@
     }
 
     // ═══════════ VALIDATION ═══════════
-    const CODE_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{7,12}$/;
+    const CODE_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{7,15}$/;
 
     function clearErrors() {
         nameError.textContent = '';
@@ -940,21 +940,33 @@
         }
 
         const code = codeInput.value.trim();
-        // Required only in create mode.
         if (!isEdit && !code) {
             codeError.textContent = 'El código es obligatorio';
             codeInput.classList.add('is-invalid');
             valid = false;
         } else if (code !== "") {
-            // In edit mode, if it hasn't changed, we could skip regex, 
-            // but let's just make it NOT block if it's the original value
             const item = listStore.find(c => c.id_community === editingId);
             const isOriginal = isEdit && item && item.code === code;
 
-            if (!isOriginal && !CODE_REGEX.test(code)) {
-                codeError.textContent = '7-12 chars: mayúscula, minúscula, número y especial';
-                codeInput.classList.add('is-invalid');
-                valid = false;
+            if (!isOriginal) {
+                if (code.length < 7 || code.length > 15) {
+                    codeError.textContent = 'Debe tener entre 7 y 15 caracteres';
+                    valid = false;
+                } else if (!/[A-Z]/.test(code)) {
+                    codeError.textContent = 'Falta una letra mayúscula';
+                    valid = false;
+                } else if (!/[a-z]/.test(code)) {
+                    codeError.textContent = 'Falta una letra minúscula';
+                    valid = false;
+                } else if (!/\d/.test(code)) {
+                    codeError.textContent = 'Falta un número';
+                    valid = false;
+                } else if (!/[^a-zA-Z0-9]/.test(code)) {
+                    codeError.textContent = 'Falta un signo especial (ej: #, $, !)';
+                    valid = false;
+                }
+                
+                if (!valid) codeInput.classList.add('is-invalid');
             }
         }
 
@@ -1049,6 +1061,10 @@
                 }
                 if (currentCode !== originalData.code) {
                     payload.code = currentCode;
+                    // Automatically sync access_code if it was the same as the old code
+                    if (!originalData.access_code || originalData.access_code === originalData.code) {
+                        payload.access_code = currentCode;
+                    }
                     hasChanges = true;
                 }
                 
@@ -1100,29 +1116,10 @@
                 body: JSON.stringify(payload)
             });
 
-            if (!result) {
-                throw new Error('No se pudo guardar la información en el servidor (Verifica la conexión)');
-            }
-
-            console.log('Community saved successfully:', result);
-            
-            // Update local state immediately for better UX
-            if (editingId) {
-                const idx = listStore.findIndex(c => c.id_community === editingId);
-                if (idx !== -1) {
-                    console.debug('Updating local listStore item at index:', idx);
-                    listStore[idx] = { ...listStore[idx], ...result };
-                }
-            } else {
-                console.debug('Adding new item to local listStore');
-                listStore.push(result);
-            }
-            render();
-
-            // SUCCESS FLOW: Close and sync
+            // SUCCESS FLOW: Sync with server and then close
+            await setup(); 
             closeModal();
             alert('¡Cambios guardados con éxito!');
-            await setup(); 
             
             // Helpful visual feedback could be added here if needed, but alert is what user asked for error.
             // For success, closing the modal is the standard indicator.
@@ -1137,11 +1134,14 @@
     // ═══════════ SETUP & RENDER ═══════════
     async function setup() {
         try {
-            const data = await AuthManager.fetch('/communities/');
-            if (Array.isArray(data) && data.length > 0) {
-                listStore = data;
+            // Add timestamp to avoid browser cache
+            const data = await AuthManager.fetch(`/communities/?t=${Date.now()}`);
+            if (Array.isArray(data)) {
+                console.log('Setup: Refreshing listStore with', data.length, 'items');
+                listStore = [...data];
                 render();
-            } else if (listStore.length === 0) {
+            }
+ else if (listStore.length === 0) {
                 // Only use fallback if we have NO data at all
                 listStore = [
                     { id_community: 1, name_community: 'DevFront Colombia', code: 'DFC#2024c', leader_name: 'Laura Méndez', member_count: 142, status_community: 'Activo' },

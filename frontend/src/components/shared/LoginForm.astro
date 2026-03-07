@@ -45,6 +45,10 @@
 
 
 
+    <div id="inactivityNotice" class="alert alert-warning mb-3" style="display: none; border-radius: 12px; font-size: 0.85rem; font-weight: 500;">
+        Sesión cerrada por inactividad
+    </div>
+
     <div class="signup-link">
         <p>¿No tienes cuenta? <a href="#" onclick="window.closeModal('loginModal'); window.openModal('signupModal')">Regístrate aquí</a></p>
     </div>
@@ -227,6 +231,27 @@
         if (modal) {
             modal.style.display = 'block';
             modal.classList.add('show');
+
+            // Detectar razón de logout por inactividad si es el modal de login
+            if (modalId === 'loginModal') {
+                // Clear fields to avoid pre-fill issues reported by user
+                const emailInput = document.getElementById('email');
+                const passwordInput = document.getElementById('password');
+                if (emailInput) {
+                    emailInput.value = '';
+                    emailInput.setAttribute('autocomplete', 'off');
+                }
+                if (passwordInput) {
+                    passwordInput.value = '';
+                    passwordInput.setAttribute('autocomplete', 'new-password');
+                }
+
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('reason') === 'inactivity') {
+                    const notice = document.getElementById('inactivityNotice');
+                    if (notice) notice.style.display = 'block';
+                }
+            }
         }
     };
 
@@ -303,22 +328,21 @@
                     throw new Error('No se pudo determinar el rol en la respuesta del servidor');
                 }
                 
-                let redirectPath = '/user/dashboard'; // Por defecto
+                let redirectPath = '/user/home'; // Redirección estándar solicitada
                 
                 if (role === 'admin') {
                     redirectPath = '/admin/dashboard';
-                } else {
-                    // Para user, mentor, leader
-                    redirectPath = `/${role}/dashboard?id=${userId}`;
+                } else if (role === 'leader') {
+                    redirectPath = '/leader/';
+                } else if (role === 'mentor') {
+                    redirectPath = `/mentor/panel?id=${userId}`;
+                } else if (role === 'usuario' || role === 'user') {
+                    redirectPath = '/user/home';
                 }
                 
                 authManager.setAuthData(result.access_token, result.user);
                 
-                // EMERGENCY BYPASS: Force redirection using standard browser APIs
-                console.log("EMERGENCY: Login success, forcing redirection to:", role);
-                localStorage.setItem('last_login_role', role);
-                localStorage.setItem('last_login_id', userId);
-                
+                console.log("Login success, redirecting to:", redirectPath);
                 window.location.assign(redirectPath);
                 
                 // Fallback if assign fails

@@ -14,7 +14,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                 </svg>
             </div>
-            <div class="metric-value" id="totalUsers">519</div>
+            <div class="metric-value" id="totalUsers">0</div>
             <p class="metric-label">Total Usuarios</p>
         </div>
 
@@ -24,7 +24,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
 </svg>
             </div>
-            <div class="metric-value" id="totalCommunities">6</div>
+            <div class="metric-value" id="totalCommunities">0</div>
             <p class="metric-label">Comunidades</p>
         </div>
 
@@ -34,7 +34,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18c-2.305 0-4.408.867-6 2.292m0-14.25v14.25" />
                 </svg>
             </div>
-            <div class="metric-value" id="totalCourses">6</div>
+            <div class="metric-value" id="totalCourses">0</div>
             <p class="metric-label">Cursos Activos</p>
         </div>
 
@@ -44,7 +44,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
                 </svg>
             </div>
-            <div class="metric-value" id="totalEvents">6</div>
+            <div class="metric-value" id="totalEvents">0</div>
             <p class="metric-label">Eventos del Mes</p>
         </div>
     </div>
@@ -108,72 +108,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
             <div class="p-4">
                 <div class="fw-bold text-dark mb-3" style="font-size: 1.1rem;">Próximos Eventos</div>
 
-                <!-- Evento 1: Workshop Astro -->
-                <div class="card border-0 shadow-sm mb-3">
-                    <div class="card-body d-flex align-items-center p-3 w-100">
-                        <div class="flex-shrink-0 bg-primary-subtle rounded-circle d-flex flex-column align-items-center justify-content-center me-3" style="width: 52px; height: 52px;">
-                            <span class="fw-bold text-primary" style="font-size: 1.1rem; line-height: 1.1;">12</span>
-                            <span class="text-uppercase text-muted" style="font-size: 0.7rem; line-height: 1.1;">MAR</span>
-                        </div>
-                        <div class="ms-3 flex-grow-1 overflow-hidden">
-                            <div class="fw-semibold text-dark mb-1" style="font-size: 1rem;">Workshop: Astro v5 y React</div>
-                            <div class="small text-muted opacity-75">Auditorio Principal • 06:00 PM</div>
-                        </div>
-                        <div class="ms-auto ps-3 flex-shrink-0">
-                            <span class="badge rounded-pill" style="font-size: 0.82rem; background-color: #fff0f0; color: #e05252; padding: 5px 14px;">Presencial</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Evento 2: Mentoring -->
-                <div class="card border-0 shadow-sm mb-3">
-                    <div class="card-body d-flex align-items-center p-3 w-100">
-                        <div class="flex-shrink-0 bg-primary-subtle rounded-circle d-flex flex-column align-items-center justify-content-center me-3" style="width: 52px; height: 52px;">
-                            <span class="fw-bold text-primary" style="font-size: 1.1rem; line-height: 1.1;">15</span>
-                            <span class="text-uppercase text-muted" style="font-size: 0.7rem; line-height: 1.1;">MAR</span>
-                        </div>
-                        <div class="ms-3 flex-grow-1 overflow-hidden">
-                            <div class="fw-semibold text-dark mb-1" style="font-size: 1rem;">Mentoring: Primer Empleo IT</div>
-                            <div class="small text-muted opacity-75">Google Meet • 05:30 PM</div>
-                        </div>
-                        <div class="ms-auto ps-3 flex-shrink-0">
-                            <span class="badge rounded-pill" style="font-size: 0.82rem; background-color: #e7f1ff; color: #3b82f6; padding: 5px 14px;">Online</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Evento 3: Hackathon -->
-                <div class="card border-0 shadow-sm mb-3">
-                    <div class="card-body d-flex align-items-center p-3 w-100">
-                        <div class="flex-shrink-0 bg-primary-subtle rounded-circle d-flex flex-column align-items-center justify-content-center me-3" style="width: 52px; height: 52px;">
-                            <span class="fw-bold text-primary" style="font-size: 1.1rem; line-height: 1.1;">22</span>
-                            <span class="text-uppercase text-muted" style="font-size: 0.7rem; line-height: 1.1;">MAR</span>
-                        </div>
-                        <div class="ms-3 flex-grow-1 overflow-hidden">
-                            <div class="fw-semibold text-dark mb-1" style="font-size: 1rem;">Hackathon CTech 2026</div>
-                            <div class="small text-muted opacity-75">Hub de Innovación • 08:00 AM</div>
-                        </div>
-                        <div class="ms-auto ps-3 flex-shrink-0">
-                            <span class="badge rounded-pill" style="font-size: 0.82rem; background-color: #fff0f0; color: #e05252; padding: 5px 14px;">Presencial</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Evento 4: Charla Soft Skills -->
-                <div class="card border-0 shadow-sm mb-0">
-                    <div class="card-body d-flex align-items-center p-3 w-100">
-                        <div class="flex-shrink-0 bg-primary-subtle rounded-circle d-flex flex-column align-items-center justify-content-center me-3" style="width: 52px; height: 52px;">
-                            <span class="fw-bold text-primary" style="font-size: 1.1rem; line-height: 1.1;">28</span>
-                            <span class="text-uppercase text-muted" style="font-size: 0.7rem; line-height: 1.1;">MAR</span>
-                        </div>
-                        <div class="ms-3 flex-grow-1 overflow-hidden">
-                            <div class="fw-semibold text-dark mb-1" style="font-size: 1rem;">Charla: Soft Skills para Devs</div>
-                            <div class="small text-muted opacity-75">Zoom • 07:00 PM</div>
-                        </div>
-                        <div class="ms-auto ps-3 flex-shrink-0">
-                            <span class="badge rounded-pill" style="font-size: 0.82rem; background-color: #e7f1ff; color: #3b82f6; padding: 5px 14px;">Online</span>
-                        </div>
-                    </div>
+                <div id="eventsPanelContainer">
+                    <p class="text-muted small p-3">Cargando eventos...</p>
                 </div>
             </div>
         </div>
@@ -317,11 +253,61 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
                 if (document.getElementById('totalUsers')) document.getElementById('totalUsers').textContent = data.total_users || '0';
                 if (document.getElementById('totalCommunities')) document.getElementById('totalCommunities').textContent = data.total_communities || '0';
                 if (document.getElementById('totalCourses')) document.getElementById('totalCourses').textContent = data.total_courses || '0';
+                if (document.getElementById('totalEvents')) document.getElementById('totalEvents').textContent = data.active_events || '0';
+                
+                // Initialize charts with real data
+                initCharts(data);
             }
-        } catch (e) { console.error('Error fetching admin metrics:', e); }
+
+            // Load Events
+            const events = await AuthManager.fetch('/events/');
+            renderEvents(events);
+        } catch (e) { 
+            console.error('Error fetching admin metrics:', e);
+            initCharts();
+        }
     }
 
-    function initCharts() {
+    function renderEvents(events) {
+        const container = document.getElementById('eventsPanelContainer');
+        if (!container) return;
+        
+        if (!events || events.length === 0) {
+            container.innerHTML = '<p class="text-muted small p-3">No hay eventos próximos.</p>';
+            return;
+        }
+
+        container.innerHTML = events.slice(0, 4).map(event => {
+            const date = new Date(event.event_date);
+            const day = date.getDate();
+            const month = date.toLocaleString('es-ES', { month: 'short' }).toUpperCase().replace('.', '');
+            const time = event.event_time || '06:00 PM';
+            const location = event.location || 'CTech Hub';
+            const isOnline = event.event_type?.toLowerCase() === 'online';
+
+            return `
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body d-flex align-items-center p-3 w-100">
+                        <div class="flex-shrink-0 bg-primary-subtle rounded-circle d-flex flex-column align-items-center justify-content-center me-3" style="width: 52px; height: 52px;">
+                            <span class="fw-bold text-primary" style="font-size: 1.1rem; line-height: 1.1;">${day}</span>
+                            <span class="text-uppercase text-muted" style="font-size: 0.7rem; line-height: 1.1;">${month}</span>
+                        </div>
+                        <div class="ms-3 flex-grow-1 overflow-hidden">
+                            <div class="fw-semibold text-dark mb-1" style="font-size: 1rem;">${event.title}</div>
+                            <div class="small text-muted opacity-75">${location} • ${time}</div>
+                        </div>
+                        <div class="ms-auto ps-3 flex-shrink-0">
+                            <span class="badge rounded-pill" style="font-size: 0.82rem; background-color: ${isOnline ? '#e7f1ff' : '#fff0f0'}; color: ${isOnline ? '#3b82f6' : '#e05252'}; padding: 5px 14px;">
+                                ${event.event_type || 'Presencial'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function initCharts(apiData = null) {
         // @ts-ignore
         const ChartLib = window.Chart;
         if (!ChartLib) return;
@@ -334,7 +320,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
                 labels: ['Sep', 'Oct', 'Nov', 'Dic', 'Ene', 'Feb', 'Mar'],
                 datasets: [{
                     label: 'Usuarios',
-                    data: [120, 180, 250, 290, 410, 520, 519],
+                    data: [12, 18, 25, 29, 41, 52, apiData?.total_users || 0],
                     borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59, 130, 246, 0.05)',
                     fill: true,
@@ -389,7 +375,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
                     y: { 
                         beginAtZero: true, 
                         grid: { color: '#f1f5f9' },
-                        ticks: { color: '#94a3b8', font: { size: 11 }, stepSize: 200 }
+                        ticks: { color: '#94a3b8', font: { size: 11 }, stepSize: 20 },
+                        max: 60
                     }
                 }
             }
@@ -397,13 +384,18 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
         // 2. Doughnut Chart: Roles
         const roleCtx = document.getElementById('roleDistChart') as HTMLCanvasElement;
+        
+        // Dynamic labels and data from API
+        const roleLabels = apiData?.role_distribution ? Object.keys(apiData.role_distribution) : ['Usuarios', 'Mentores', 'Líderes'];
+        const roleValues = apiData?.role_distribution ? Object.values(apiData.role_distribution) : [0, 0, 0];
+
         new ChartLib(roleCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Usuarios', 'Mentores', 'Líderes'],
+                labels: roleLabels,
                 datasets: [{
-                    data: [6, 2, 6],
-                    backgroundColor: ['#3b82f6', '#8b5cf6', '#f59e0b'],
+                    data: roleValues,
+                    backgroundColor: ['#3b82f6', '#8b5cf6', '#f59e0b', '#10b981'],
                     borderWidth: 4,
                     borderColor: '#ffffff',
                     hoverOffset: 4
@@ -420,12 +412,16 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 
         // 3. Bar Chart: Communities
         const commCtx = document.getElementById('commMembersChart') as HTMLCanvasElement;
+        
+        const commLabels = apiData?.community_distribution ? Object.keys(apiData.community_distribution) : ['Sin datos'];
+        const commValues = apiData?.community_distribution ? Object.values(apiData.community_distribution) : [0];
+
         new ChartLib(commCtx, {
             type: 'bar',
             data: {
-                labels: ['DevFront', 'Backend', 'Data', 'Mobile', 'DevOps', 'UX/UI'],
+                labels: commLabels,
                 datasets: [{
-                    data: [142, 98, 75, 61, 54, 89],
+                    data: commValues,
                     backgroundColor: '#3b82f6',
                     borderRadius: 6,
                     barThickness: 16
@@ -437,19 +433,26 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
                 plugins: { legend: { display: false } },
                 scales: {
                     x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11 } } },
-                    y: { grid: { color: '#f1f5f9' }, ticks: { color: '#94a3b8', font: { size: 11 } } }
+                    y: { 
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9' }, 
+                        ticks: { color: '#94a3b8', font: { size: 11 }, stepSize: 5 },
+                        max: 20
+                    }
                 }
             }
         });
     }
 
     loadStats();
-    // Wait for CDN if needed
-    if (window.Chart) {
-        initCharts();
-    } else {
-        document.addEventListener('DOMContentLoaded', initCharts);
-    }
+    
+    // El initCharts se llama dentro de loadStats para asegurar que tiene los datos
+    // Pero si por alguna razón falla, necesitamos un fallback o manejar el DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!window.Chart) {
+            console.error('Chart.js not loaded');
+        }
+    });
 </script>
 
 </AdminLayout>

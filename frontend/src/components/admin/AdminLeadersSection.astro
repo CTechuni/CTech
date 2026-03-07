@@ -33,6 +33,58 @@
     </div>
 </div>
 
+<!-- Modal: Detalle de Líder (Solo Lectura) -->
+<div class="comm-modal-overlay" id="leaderDetailModal">
+    <div class="comm-modal" style="max-width: 440px;">
+        <div class="comm-modal-header border-0 pb-0">
+            <h5 class="comm-modal-title">Ficha de Líder</h5>
+            <button class="comm-modal-close" id="detailCloseX" type="button" aria-label="Cerrar">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:20px;height:20px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="comm-detail-content px-4 pb-4 pt-2">
+            <!-- Header/Avatar -->
+            <div class="text-center mb-4">
+                <div class="leader-detail-avatar-container mx-auto" id="detailAvatarBox">
+                    <!-- Initials or Avatar dynamic -->
+                </div>
+                <h4 class="mt-3 mb-1 fw-bold text-dark" id="detailName"></h4>
+                <p class="text-muted small mb-3" id="detailEmail"></p>
+                <div id="detailStatusBadge" class="d-inline-flex align-items-center gap-2 px-2 py-1 rounded-pill" style="font-size: 0.75rem; font-weight: 600;">
+                    <span class="status-dot-inner" id="detailStatusDot"></span>
+                    <span id="detailStatusText"></span>
+                </div>
+            </div>
+
+            <!-- Info Rows -->
+            <div class="comm-detail-info-list d-flex flex-column gap-3">
+                <div class="comm-detail-row">
+                    <span class="comm-detail-label text-muted small text-uppercase fw-bold">Comunidad Asignada</span>
+                    <div class="comm-detail-value fw-semibold text-dark" id="detailCommunity"></div>
+                </div>
+
+                <div class="comm-detail-row">
+                    <span class="comm-detail-label text-muted small text-uppercase fw-bold">Fecha de Registro</span>
+                    <div class="comm-detail-value fw-semibold text-dark" id="detailCreatedAt"></div>
+                </div>
+                
+                <div class="comm-detail-row">
+                    <span class="comm-detail-label text-muted small text-uppercase fw-bold">Rol en el Sistema</span>
+                    <div class="comm-detail-value fw-semibold text-dark">Líder de Comunidad</div>
+                </div>
+            </div>
+            
+            <!-- Footer Action -->
+            <div class="mt-3 text-center">
+                <button type="button" class="btn btn-light w-100 py-2 fw-bold" id="detailCloseBtn" style="border-radius: 12px; border: 1.5px solid #e2e8f0; color: #64748b;">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal: Registro / Edición de Líder -->
 <div class="comm-modal-overlay" id="leaderModal">
     <div class="comm-modal">
@@ -87,13 +139,23 @@
                 </div>
             </div>
 
-            <div class="comm-form-group" id="communitySelectGroup" style="margin-bottom: 0;">
+            <div class="comm-form-group" id="communitySelectGroup">
                 <label class="comm-label" for="leaderCommunity">Vincular Comunidad <span class="comm-required">*</span></label>
                 <select id="leaderCommunity" class="comm-input comm-select">
                     <option value="">Seleccionar comunidad</option>
                     <!-- Dinámico -->
                 </select>
                 <div class="comm-field-error" id="communityError"></div>
+            </div>
+
+            <!-- Estado (solo en edición) -->
+            <div class="comm-form-group" id="leaderStatusGroup" style="display:none; margin-bottom: 0;">
+                <label class="comm-label" for="leaderStatus">Estado del Líder <span class="comm-required">*</span></label>
+                <select id="leaderStatus" class="comm-input comm-select">
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                </select>
+                <div class="comm-field-error" id="statusError"></div>
             </div>
 
             <!-- Footer -->
@@ -105,7 +167,7 @@
     </div>
 </div>
 
-<style>
+<style is:global>
     .admin-leaders-section {
         display: flex;
         flex-direction: column;
@@ -113,142 +175,175 @@
         padding-top: 0.25rem;
     }
 
-    .section-top-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .header-text h2 {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: #1E293B;
-        margin: 0;
-    }
-
-    .header-text p {
-        font-size: 0.9rem;
-        color: #94A3B8;
-        margin: 0.2rem 0 0 0;
-        font-weight: 500;
-    }
-
-
-    /* Toolbars Unificadas */
-    .d-flex { display: flex; }
-    .justify-content-between { justify-content: space-between; }
-    .align-items-center { align-items: center; }
-    .flex-wrap { flex-wrap: wrap; }
-    .gap-3 { gap: 1rem; }
-    .mb-4 { margin-bottom: 1.5rem; }
-
-    .mb-4 { margin-bottom: 1.5rem; }
-
-    /* Custom form-control focus to match Communities module */
-    .form-control:focus {
-        border-color: #cbd5e1 !important;
-        box-shadow: none !important;
-    }
-
-    /* Grid */
     .leaders-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 1.5rem;
     }
 
-    /* Leader Card */
-    :global(.leader-card) {
-        background: white;
-        border-radius: 20px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    /* ═══════════ LEADER CARD ═══════════ */
+    .leader-card {
+        background: #ffffff;
         border: 1px solid #f1f5f9;
+        border-radius: 16px;
+        padding: 1.25rem;
         display: flex;
         flex-direction: column;
-        gap: 1.25rem;
-        transition: transform 0.2s, box-shadow 0.2s;
+        height: 100%;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
     }
-    :global(.leader-card:hover) {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    .leader-card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        transform: translateY(-2px);
     }
-
-    :global(.leader-card-top) {
+    .leader-card-header {
         display: flex;
-        justify-content: space-between;
         align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 1.15rem;
     }
-
-    :global(.leader-identity) {
+    .leader-card-identity {
         display: flex;
-        gap: 1rem;
         align-items: center;
+        gap: 0.85rem;
     }
-
-    :global(.leader-avatar) {
+    .leader-avatar-box {
         width: 48px;
         height: 48px;
-        border-radius: 14px;
-        background: #f1f5f9;
+        min-width: 48px;
+        min-height: 48px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 800;
-        font-size: 1.1rem;
+        flex-shrink: 0;
+        overflow: hidden;
+        background: #f1f5f9;
         color: #3b82f6;
     }
-
-    :global(.leader-info h4) {
-        margin: 0;
-        font-size: 1rem;
+    .leader-initials {
         font-weight: 700;
-        color: #0f172a;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
     }
-    :global(.leader-info .leader-email) {
-        font-size: 0.8rem;
-        color: #64748b;
+    .leader-avatar-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
-
-    :global(.leader-card-actions) {
-        display: flex;
-        gap: 0.5rem;
+    .leader-name-text {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 0.95rem;
+        margin: 0;
+        line-height: 1.3;
     }
-    :global(.leader-action-btn) {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        border: none;
-        background: #f8fafc;
+    .leader-email-sub {
+        display: block;
+        margin-top: 0.2rem;
+        font-size: 0.75rem;
+        font-weight: 500;
         color: #94a3b8;
+    }
+    .leader-actions {
+        display: flex;
+        gap: 0.35rem;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+    .leader-card:hover .leader-actions {
+        opacity: 1;
+    }
+    .leader-action-btn {
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 8px;
+        transition: all 0.15s;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s;
     }
-    :global(.leader-edit-btn:hover) { background: #eff6ff; color: #3b82f6; }
-    :global(.leader-delete-btn:hover) { background: #fef2f2; color: #ef4444; }
-    :global(.leader-action-btn svg) {
-        width: 18px;
-        height: 18px;
+    .leader-action-btn:hover {
+        color: #3b82f6;
+        background: #eff6ff;
     }
-
-    :global(.leader-communities) {
+    .leader-action-btn svg {
+        width: 17px !important;
+        height: 17px !important;
+    }
+    .leader-card-footer {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: auto;
+        border-top: 1px solid #f8fafc;
     }
-    :global(.community-chip) {
+    .leader-community-block {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #475569;
+    }
+    .community-chip {
         background: #f1f5f9;
         color: #475569;
-        padding: 0.2rem 0.6rem;
-        border-radius: 6px;
+        padding: 0.25rem 0.65rem;
+        border-radius: 8px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+    /* Status dot */
+    .comm-status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-left: 6px;
+        vertical-align: middle;
+        flex-shrink: 0;
+    }
+    /* Rol badge */
+    .leader-role-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
         font-size: 0.75rem;
         font-weight: 600;
+        color: #64748b;
+        padding: 0 0 0.65rem 0;
+        border-bottom: 1px dashed #f1f5f9;
+    }
+    /* Footer meta row (code + status) */
+    .leader-footer-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.75rem;
+    }
+    .leader-code-tag {
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: #94a3b8;
+        background: #f8fafc;
+        padding: 0.1rem 0.45rem;
+        border-radius: 5px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+    .leader-members-count {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #3b82f6;
+        display: block;
+        text-align: right;
     }
 
-    /* ═══════════ MODAL ═══════════ */
+    /* ═══════════ MODAL OVERLAY ═══════════ */
     .comm-modal-overlay {
         position: fixed;
         inset: 0;
@@ -280,6 +375,34 @@
     .comm-modal-overlay.active .comm-modal {
         transform: translateY(0) scale(1);
     }
+
+    .section-top-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-text h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #1E293B;
+        margin: 0;
+    }
+
+    .header-text p {
+        font-size: 0.9rem;
+        color: #94A3B8;
+        margin: 0.2rem 0 0 0;
+        font-weight: 500;
+    }
+
+    /* Toolbars Unificadas */
+    .d-flex { display: flex; }
+    .justify-content-between { justify-content: space-between; }
+    .align-items-center { align-items: center; }
+    .flex-wrap { flex-wrap: wrap; }
+    .gap-3 { gap: 1rem; }
+    .mb-4 { margin-bottom: 1.5rem; }
 
     /* Header */
     .comm-modal-header {
@@ -483,6 +606,52 @@
     }
     .leader-toast.success .toast-icon { color: #34d399; }
     .leader-toast.error   .toast-icon { color: #f87171; }
+    /* ═══════════ DETAIL MODAL SPECIFIC ═══════════ */
+    .leader-detail-avatar-container {
+        width: 100px;
+        height: 100px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: #f1f5f9;
+        color: #3b82f6;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        font-size: 2.2rem;
+        font-weight: 800;
+    }
+    .leader-detail-avatar-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .status-dot-inner {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+    .comm-detail-row {
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    #detailStatusBadge.bg-success-subtle { background: #ecfdf5; color: #059669; }
+    #detailStatusBadge.bg-danger-subtle { background: #fef2f2; color: #dc2626; }
+
+    /* Interactive Card */
+    .leader-card {
+        cursor: pointer;
+    }
+    /* Action buttons must prevent detail opening */
+    .leader-actions {
+        z-index: 10;
+        position: relative;
+    }
 </style>
 
 <script>
@@ -546,6 +715,8 @@
     const passError = document.getElementById('passwordError')!;
     const confirmError = document.getElementById('confirmError')!;
     const communityError = document.getElementById('communityError')!;
+    const statusSelect = document.getElementById('leaderStatus') as HTMLSelectElement;
+    const leaderStatusGroup = document.getElementById('leaderStatusGroup')!;
 
     // ═══════════ INITIALIZATION ═══════════
     async function init() {
@@ -560,7 +731,9 @@
         isLoading = true;
         render();
         try {
+            console.log('DEBUG: Fetching leaders...');
             const data = await AuthManager.fetch('/users/leaders');
+            console.log('DEBUG: Leaders data:', data);
             leaders = Array.isArray(data) ? data : [];
         } catch (err) {
             console.error('Error fetching leaders:', err);
@@ -593,31 +766,28 @@
     function renderCommunitySelect(selectedId: number | null = null, showAll = false) {
         let options = '<option value="">Seleccionar comunidad</option>';
         
-        // If we have an error message already, don't just show "No hay comunidades"
         if (communityError.textContent && communities.length === 0) {
             options = '<option value="" disabled>Error de autenticación</option>';
             communitySelect.innerHTML = options;
             return;
         }
 
-        // Count available communities - using more robust check for "no leader"
-        // leader_id is None in Python -> null in JSON.
+        // A community is available if:
+        // 1. It has no leader at all, OR
+        // 2. Its leader is the current leader being edited (editingId), OR
+        // 3. showAll (create with override)
         const available = communities.filter(c => {
             const noLeader = c.leader_id === null || c.leader_id === undefined;
-            const isCurrent = selectedId && Number(c.id_community) === Number(selectedId);
-            return noLeader || isCurrent || showAll;
+            const isCurrentLeadersCommunity = editingId && Number(c.leader_id) === Number(editingId);
+            return noLeader || isCurrentLeadersCommunity || showAll;
         });
-
-        console.log(`DEBUG: renderCommunitySelect - rendering ${available.length} options (selectedId: ${selectedId}, showAll: ${showAll})`);
         
         if (available.length === 0 && !showAll) {
             options = '<option value="" disabled>No hay comunidades disponibles para asignar</option>';
-            console.log('DEBUG: Mostrando mensaje de no disponibilidad');
         } else {
             available.forEach(c => {
                 const isSelected = selectedId && Number(c.id_community) === Number(selectedId) ? 'selected' : '';
-                const leaderTag = (c.leader_id && Number(c.id_community) !== Number(selectedId)) ? ' (Ocupada)' : '';
-                options += `<option value="${c.id_community}" ${isSelected}>${c.name_community}${leaderTag}</option>`;
+                options += `<option value="${c.id_community}" ${isSelected}>${c.name_community}</option>`;
             });
         }
         
@@ -710,6 +880,11 @@
             payload.community_id = commVal;
         }
 
+        const statusVal = statusSelect.value;
+        if (statusVal && statusVal !== (originalLeaderData.status || 'Activo')) {
+            payload.status = statusVal;
+        }
+
         return payload;
     }
 
@@ -750,7 +925,13 @@
             passInput.required = false;
             confirmInput.required = false;
 
-            // Hide asterisks in edit mode (fields are optional)
+            // Show status selector, hide asterisks
+            leaderStatusGroup.style.display = '';
+            let currentStatus = data.status || 'Activo';
+            if (currentStatus.toLowerCase() === 'active') currentStatus = 'Activo';
+            if (currentStatus.toLowerCase() === 'inactive') currentStatus = 'Inactivo';
+            statusSelect.value = currentStatus;
+
             form.querySelectorAll('.comm-required').forEach((el: Element) => {
                 (el as HTMLElement).style.display = 'none';
             });
@@ -759,16 +940,15 @@
             renderCommunitySelect(currentCommId);
             communitySelect.value = currentCommId ? String(currentCommId) : '';
         } else {
+            leaderStatusGroup.style.display = 'none';
             passwordFields.style.display = 'block';
             passInput.required = true;
             confirmInput.required = true;
 
-            // Restore asterisks in create mode (fields are required)
             form.querySelectorAll('.comm-required').forEach((el: Element) => {
                 (el as HTMLElement).style.display = '';
             });
             
-            // Force show all if something is typed in the general search bar
             const showAll = searchInput.value.trim().length > 0;
             renderCommunitySelect(null, showAll);
         }
@@ -798,6 +978,75 @@
             alert('Error al eliminar líder.');
         }
     }
+
+    // ═══════════ DETAIL MODAL LOGIC ═══════════
+    const detailModal = document.getElementById('leaderDetailModal')!;
+    const detailAvatarBox = document.getElementById('detailAvatarBox')!;
+    const detailName = document.getElementById('detailName')!;
+    const detailEmail = document.getElementById('detailEmail')!;
+    const detailStatusBadge = document.getElementById('detailStatusBadge')!;
+    const detailStatusDot = document.getElementById('detailStatusDot')!;
+    const detailStatusText = document.getElementById('detailStatusText')!;
+    const detailCommunity = document.getElementById('detailCommunity')!;
+    const detailCreatedAt = document.getElementById('detailCreatedAt')!;
+
+    function formatDate(dateStr: string) {
+        if (!dateStr) return 'No disponible';
+        try {
+            const date = new Date(dateStr);
+            return new Intl.DateTimeFormat('es-ES', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            }).format(date);
+        } catch {
+            return dateStr;
+        }
+    }
+
+    function openDetailModal(data: any) {
+        detailName.textContent = data.name_user || 'Sin nombre';
+        detailEmail.textContent = data.email || 'Sin correo';
+        
+        // Community
+        let communeName = data.community_name;
+        if (!communeName && data.community_id) {
+            const found = communities.find(c => Number(c.id_community) === Number(data.community_id));
+            if (found) communeName = found.name_community || found.name;
+        }
+        detailCommunity.textContent = communeName || 'Sin asignar';
+        
+        detailCreatedAt.textContent = formatDate(data.created_at);
+
+        // Status
+        const isActive = (data.status || '').toLowerCase() !== 'inactivo' && (data.status || '').toLowerCase() !== 'inactive';
+        detailStatusText.textContent = isActive ? 'Activo' : 'Inactivo';
+        detailStatusBadge.className = `d-inline-flex align-items-center gap-2 px-2 py-1 rounded-pill ${isActive ? 'bg-success-subtle' : 'bg-danger-subtle'}`;
+        detailStatusDot.className = `status-dot-inner ${isActive ? 'bg-success' : 'bg-danger'}`;
+
+        // Avatar
+        const avatarUrl = data.profile?.avatar_url;
+        if (avatarUrl) {
+            detailAvatarBox.innerHTML = `<img src="${avatarUrl}" alt="Avatar">`;
+        } else {
+            const initial = (data.name_user || 'L').substring(0, 1).toUpperCase();
+            detailAvatarBox.innerHTML = `<span class="leader-initials" style="font-size: 2.2rem;">${initial}</span>`;
+        }
+
+        detailModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetailModal() {
+        detailModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('detailCloseX')?.addEventListener('click', closeDetailModal);
+    document.getElementById('detailCloseBtn')?.addEventListener('click', closeDetailModal);
+    detailModal.addEventListener('click', (e) => {
+        if (e.target === detailModal) closeDetailModal();
+    });
 
     // ═══════════ EVENTS ═══════════
     document.getElementById('addLeaderBtn')?.addEventListener('click', () => openModal('create'));
@@ -843,12 +1092,14 @@
                 method = 'POST';
             }
 
+            console.log(`DEBUG: Sending ${method} to ${url}`, payload);
             const result = await AuthManager.fetch(url, {
                 method,
                 body: JSON.stringify(payload)
             });
 
             if (result) {
+                const finalResult = result;
                 if (wasEditing) {
                     // 1. Close modal immediately
                     closeModal();
@@ -862,28 +1113,55 @@
                     // 3. Patch the DOM card directly (no full re-render)
                     const card = grid.querySelector(`[data-leader-id="${wasEditing}"]`) as HTMLElement;
                     if (card) {
+                        console.log('DEBUG: Updating card in DOM', wasEditing);
                         // Update name
-                        const nameEl = card.querySelector('h4');
-                        if (nameEl) nameEl.textContent = result.name_user || leaders[idx]?.name_user || '';
+                        const nameEl = card.querySelector('.leader-name-text');
+                        if (nameEl) nameEl.textContent = finalResult.name_user || leaders[idx]?.name_user || '';
 
-                        // Update avatar initial
-                        const avatarEl = card.querySelector('.leader-avatar');
-                        if (avatarEl) avatarEl.textContent = (result.name_user || 'L').substring(0, 1).toUpperCase();
+                        // Update avatar
+                        const avatarBox = card.querySelector('.leader-avatar-box');
+                        if (avatarBox) {
+                            const avatarUrl = finalResult.profile?.avatar_url || (leaders[idx]?.profile?.avatar_url);
+                            if (avatarUrl) {
+                                avatarBox.innerHTML = `<img src="${avatarUrl}" alt="Avatar">`;
+                            } else {
+                                const initial = (finalResult.name_user || leaders[idx]?.name_user || 'L').substring(0, 1).toUpperCase();
+                                avatarBox.innerHTML = `<span class="leader-initials">${initial}</span>`;
+                            }
+                        }
 
                         // Update email
-                        const emailEl = card.querySelector('.leader-email');
-                        if (emailEl) emailEl.textContent = result.email || leaders[idx]?.email || '';
+                        const emailEl = card.querySelector('.leader-email-sub');
+                        if (emailEl) emailEl.textContent = finalResult.email || leaders[idx]?.email || '';
 
-                        // Update community chip
+                        // Update community chip and role badge
                         const chipEl = card.querySelector('.community-chip');
-                        if (chipEl) {
+                        const roleBadgeEl = card.querySelector('.leader-role-badge');
+                        if (chipEl || roleBadgeEl) {
                             let communeName = '';
-                            const commId = result.community_id ?? leaders[idx]?.community_id;
+                            const commId = finalResult.community_id ?? leaders[idx]?.community_id;
                             if (commId) {
-                                const found = communities.find(c => c.id_community === commId);
+                                const found = communities.find(c => Number(c.id_community) === Number(commId));
                                 communeName = found?.name_community || found?.name || '';
                             }
-                            chipEl.textContent = communeName || 'Sin comunidad';
+                            if (chipEl) chipEl.textContent = communeName || 'Sin comunidad';
+                            if (roleBadgeEl) roleBadgeEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:13px;height:13px;"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg> Líder de Comunidad &middot; ${communeName || 'Sin comunidad'}`;
+                        }
+
+                        // Update status dot
+                        const newStatus = finalResult.status || leaders[idx]?.status || 'Activo';
+                        const newIsActive = newStatus.toLowerCase() !== 'inactivo' && newStatus.toLowerCase() !== 'inactive';
+                        const statusDot = card.querySelector('.comm-status-dot');
+                        if (statusDot) {
+                            statusDot.className = `comm-status-dot ${newIsActive ? 'bg-success' : 'bg-danger'}`;
+                            statusDot.setAttribute('title', newIsActive ? 'Activo' : 'Inactivo');
+                        }
+
+                        // Update footer-meta (code + status label)
+                        const footerMeta = card.querySelector('.leader-footer-meta');
+                        const commCode = leaders[idx]?.community_code || '';
+                        if (footerMeta && commCode) {
+                            footerMeta.innerHTML = `<span class="leader-code-tag">${commCode}</span><span style="font-size:0.72rem;color:#94a3b8;">${newIsActive ? 'Activo' : 'Inactivo'}</span>`;
                         }
 
                         // Highlight the updated card briefly
@@ -920,27 +1198,36 @@
     searchInput.addEventListener('input', () => render());
 
     // Listen for changes to update button state
-    [nameInput, emailInput, passInput, confirmInput, communitySelect].forEach(el => {
+    [nameInput, emailInput, passInput, confirmInput, communitySelect, statusSelect].forEach(el => {
         el.addEventListener('input', updateSubmitButtonStyle);
         el.addEventListener('change', updateSubmitButtonStyle);
     });
 
-    // Delegation for edit/delete & toggle password
+    // Delegation for detail & edit/delete & toggle password
     grid.addEventListener('click', (e) => {
         const target = e.target as HTMLElement;
         const editBtn = target.closest('.leader-edit-btn');
         const deleteBtn = target.closest('.leader-delete-btn');
+        const card = target.closest('.leader-card') as HTMLElement;
 
         if (editBtn) {
             const id = parseInt(editBtn.getAttribute('data-id')!);
             const item = leaders.find(l => l.id === id);
             if (item) openModal('edit', item);
+            return; // Prevent triggering detail modal
         }
 
         if (deleteBtn) {
             const id = parseInt(deleteBtn.getAttribute('data-id')!);
             const item = leaders.find(l => l.id === id);
             if (item) deleteLeader(id, item.name_user);
+            return; // Prevent triggering detail modal
+        }
+
+        if (card) {
+            const id = parseInt(card.getAttribute('data-leader-id')!);
+            const item = leaders.find(l => l.id === id);
+            if (item) openDetailModal(item);
         }
     });
 
@@ -1014,30 +1301,48 @@
         grid.innerHTML = filtered.map(l => {
             const initial = (l.name_user || 'L').substring(0, 1).toUpperCase();
             
-            // Look up community name in the communities array
+            // Look up community name
             let communeName = l.community_name;
             if (!communeName && l.community_id) {
-                const found = communities.find(c => c.id_community === l.community_id);
-                if (found) communeName = found.name;
+                const found = communities.find(c => Number(c.id_community) === Number(l.community_id));
+                if (found) communeName = found.name_community || found.name;
             }
+
+            const avatarUrl = l.profile?.avatar_url;
+            const isActive = (l.status || '').toLowerCase() !== 'inactivo' && (l.status || '').toLowerCase() !== 'inactive';
+            const statusDotClass = isActive ? 'bg-success' : 'bg-danger';
+            const statusLabel = isActive ? 'Activo' : 'Inactivo';
+            const memberCount = l.member_count ?? '?';
+            const commCode = l.community_code || '';
 
             return `
                 <div class="leader-card" data-leader-id="${l.id}">
-                    <div class="leader-card-top">
-                        <div class="leader-identity">
-                            <div class="leader-avatar">${initial}</div>
+                    <div class="leader-card-header">
+                        <div class="leader-card-identity">
+                            <div class="leader-avatar-box">
+                                ${avatarUrl ? `<img src="${avatarUrl}" alt="Avatar">` : `<span class="leader-initials">${initial}</span>`}
+                            </div>
                             <div class="leader-info">
-                                <h4>${l.name_user || 'Sin nombre'}</h4>
-                                <span class="leader-email">${l.email || 'Sin correo'}</span>
+                                <h4 class="leader-name-text">${l.name_user || 'Sin nombre'}<span class="comm-status-dot ${statusDotClass}" title="${statusLabel}"></span></h4>
+                                <span class="leader-email-sub">${l.email || 'Sin correo'}</span>
                             </div>
                         </div>
-                        <div class="leader-card-actions">
+                        <div class="leader-actions">
                             <button class="leader-action-btn leader-edit-btn" data-id="${l.id}" title="Editar">${editIcon}</button>
                             <button class="leader-action-btn leader-delete-btn" data-id="${l.id}" title="Eliminar">${deleteIcon}</button>
                         </div>
                     </div>
-                    <div class="leader-communities">
-                        <span class="community-chip">${communeName || 'Sin comunidad'}</span>
+
+                    <!-- Rol -->
+                    <div class="leader-role-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:13px;height:13px;"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                        Líder de Comunidad &middot; ${communeName || 'Sin comunidad'}
+                    </div>
+
+                    ${commCode ? `<div class="leader-footer-meta"><span class="leader-code-tag">${commCode}</span></div>` : ''}
+
+                    <div class="leader-card-footer">
+                        <span class="leader-members-count">${memberCount} miembro${memberCount === 1 ? '' : 's'}</span>
                     </div>
                 </div>
             `;

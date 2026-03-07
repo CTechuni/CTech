@@ -104,7 +104,14 @@ export class AuthManager {
             role = ctx.role;
             id = ctx.id;
         }
-        return localStorage.getItem(this.getTokenKey(role, id));
+
+        const contextKey = this.getTokenKey(role, id);
+        const contextToken = localStorage.getItem(contextKey);
+
+        if (contextToken) return contextToken;
+
+        // Fallback to base key (authToken) if context-specific not found
+        return localStorage.getItem(this.baseTokenKey);
     }
 
     getUser(role, id) {
@@ -214,10 +221,42 @@ export class AuthManager {
         });
     }
 
-    logout() {
+    logout(reason = '') {
         const { role, id } = this.getCurrentContext();
         this.clearAuthData(role, id);
-        window.location.href = '/';
+
+        let url = '/';
+        if (reason === 'inactivity') {
+            url = '/?reason=inactivity';
+        }
+
+        window.location.href = url;
+    }
+
+    // ── Timer de Inactividad ──────────────────────────────────────────────────
+
+    initInactivityTimer(timeoutMinutes = 120) {
+        if (typeof window === 'undefined') return;
+
+        let timeout;
+        const ms = timeoutMinutes * 60 * 1000;
+
+        const resetTimer = () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                console.warn('Sesión cerrada por inactividad');
+                this.logout('inactivity');
+            }, ms);
+        };
+
+        // Eventos que cuentan como "actividad"
+        const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+        events.forEach(name => {
+            document.addEventListener(name, resetTimer, true);
+        });
+
+        resetTimer(); // Iniciar
+        console.log(`Timer de inactividad iniciado: ${timeoutMinutes} min`);
     }
 
     // ── Peticiones autenticadas (estático) ────────────────────────────────────
@@ -246,8 +285,7 @@ export class AuthManager {
             const response = await fetch(url, { ...options, headers });
 
             if (response.status === 401) {
-                console.warn('[BYPASS VISUAL] 401 recibido en AuthManager.fetch - redirect deshabilitado.');
-                return null;
+                throw new Error('Tu sesión ha expirado o no tienes permisos (401). El redirect está deshabilitado.');
             }
 
             if (!response.ok) {
@@ -273,37 +311,33 @@ export const authManager = new AuthManager();
 
 /** Redirige al inicio si el usuario no está autenticado. */
 export function requireAuth() {
-    /**
-     * IMPLEMENTACIÓN ORIGINAL (COMENTADA TEMPORALMENTE)
-     *
-     * if (!authManager.isAuthenticated()) {
-     *     window.location.href = '/';
-     *     return false;
-     * }
-     * return true;
-     */
+    if (typeof window === 'undefined') return true;
 
-    // Autenticación deshabilitada para permitir navegar sin login
+    if (!authManager.isAuthenticated()) {
+        console.warn('requireAuth: No autenticado, redirigiendo a /');
+        window.location.href = '/';
+        return false;
+    }
     return true;
 }
 
 /** Redirige al inicio si el usuario no tiene el rol esperado. */
-export function requireRole(role) {
-    /**
-     * IMPLEMENTACIÓN ORIGINAL (COMENTADA TEMPORALMENTE)
-     *
-     * if (!requireAuth()) return false;
-     * const userRole = authManager.getRole();
-     * console.debug('requireRole check', role, 'currentRole', userRole);
-     * if (!userRole.includes(role.toLowerCase())) {
-     *     console.warn('requireRole failed, redirecting to /', userRole, role);
-     *     window.location.href = '/';
-     *     return false;
-     * }
-     * return true;
-     */
+export function requireRole(expectedRole) {
+    if (typeof window === 'undefined') return true;
 
-    // Comprobación de rol deshabilitada para desarrollo
+    if (!requireAuth()) return false;
+
+    const { role } = authManager.getCurrentContext();
+    const user = authManager.getUser();
+    const userRole = String(user?.role || role || '').toLowerCase();
+
+    console.debug('requireRole check', { expectedRole, userRole });
+
+    if (userRole !== String(expectedRole).toLowerCase()) {
+        console.warn('requireRole failed, redirecting to /', { userRole, expectedRole });
+        window.location.href = '/';
+        return false;
+    }
     return true;
 }
 
